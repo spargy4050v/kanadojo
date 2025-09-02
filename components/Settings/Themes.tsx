@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useClick, useLong } from '@/lib/hooks/useAudio';
 import { buttonBorderStyles } from '@/static/styles';
 import { useState } from 'react';
-import { Dice5, RotateCcw } from 'lucide-react';
+import { Dice5 } from 'lucide-react';
 import { Random } from 'random-js';
 
 const random = new Random();

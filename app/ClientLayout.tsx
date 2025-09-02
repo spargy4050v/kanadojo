@@ -43,7 +43,7 @@ export default function ClientLayout({
       data-scroll-restoration-id='container'
       className={clsx(
         'bg-[var(--background-color)] text-[var(--main-color)] min-h-[100dvh] max-w-[100dvw]',
-        fontClassName
+        process.env.NODE_ENV === 'production' ? fontClassName : ''
       )}
       style={{
         height: '100dvh',

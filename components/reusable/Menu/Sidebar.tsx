@@ -53,7 +53,7 @@ const Sidebar = () => {
       <h1
         className={clsx(
           'flex gap-1.5 items-center text-3xl pl-4',
-          'max-lg:hidden max-2xl:flex-col'
+          'max-lg:hidden max-3xl:flex-col max-3xl:items-start'
         )}
       >
         <span className='font-bold'>KanaDojo</span>

@@ -1,11 +1,15 @@
 'use client';
 import { createElement } from 'react';
-import themes from '@/static/themes';
+import themeSets from '@/static/themes';
 import useThemeStore from '@/store/useThemeStore';
 import clsx from 'clsx';
 import { useClick, useLong } from '@/lib/hooks/useAudio';
 import { buttonBorderStyles } from '@/static/styles';
 import { useState } from 'react';
+import { Dice5, RotateCcw } from 'lucide-react';
+import { Random } from 'random-js';
+
+const random = new Random();
 
 const Themes = () => {
   const { playClick } = useClick();
@@ -15,9 +19,68 @@ const Themes = () => {
 
   const [isHovered, setIsHovered] = useState('');
 
+  const [randomTheme, setRandomTheme] = useState(
+    themeSets[2].themes[random.integer(0, themeSets[2].themes.length - 1)]
+  );
+
   return (
     <div className='flex flex-col gap-6 lg:pr-20'>
-      {themes.map((themeSet, i) => (
+      <div className='flex gap-2'>
+        <button
+          className={clsx(
+            'p-6 flex justify-center items-center gap-2',
+            buttonBorderStyles
+          )}
+          onMouseEnter={() => setIsHovered(randomTheme.id)}
+          onMouseLeave={() => setIsHovered('')}
+          style={{
+            color: randomTheme.mainColor,
+            backgroundColor:
+              isHovered === randomTheme.id
+                ? randomTheme.borderColor
+                : randomTheme.cardColor
+          }}
+          onClick={() => {
+            playClick();
+            const randomTheme =
+              themeSets[2].themes[
+                random.integer(0, themeSets[2].themes.length - 1)
+              ];
+            setRandomTheme(randomTheme);
+            setTheme(randomTheme.id);
+          }}
+        >
+          <span className='mb-0.5'>
+            {randomTheme.id === theme ? '\u2B24 ' : ''}
+          </span>
+          <Dice5
+            style={{
+              color: randomTheme.secondaryColor
+            }}
+          />
+          random
+        </button>
+        {/*
+        <button
+          className={clsx(
+            'p-4 flex justify-center items-center gap-2',
+            buttonBorderStyles
+          )}
+          onClick={() => {
+            playClick();
+            setRandomTheme(
+              themeSets[2].themes[
+                random.integer(0, themeSets[2].themes.length - 1)
+              ]
+            );
+          }}
+        >
+          <RotateCcw className='text-[var(--secondary-color)] ' />
+          reroll
+        </button>
+        */}
+      </div>
+      {themeSets.map((themeSet, i) => (
         <div key={i} className='flex flex-col gap-3'>
           <h4 className='text-xl flex flex-row items-center gap-1.5'>
             {createElement(themeSet.icon)}
@@ -36,8 +99,7 @@ const Themes = () => {
                   backgroundColor:
                     isHovered === currentTheme.id
                       ? currentTheme.borderColor
-                      : currentTheme.backgroundColor,
-                  borderColor: currentTheme.borderColor
+                      : currentTheme.backgroundColor
                 }}
                 onMouseEnter={() => setIsHovered(currentTheme.id)}
                 onMouseLeave={() => setIsHovered('')}

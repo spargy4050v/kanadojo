@@ -102,16 +102,16 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
         setCorrectRomajiChar(newRandomRomaji);
         setFeedback(
           <>
-            <span>{`correct! ${correctRomajiChar} = ${correctKanaChar} `}</span>
-            <CircleCheck className="inline" />
+            <span>{`${correctRomajiChar} = ${correctKanaChar} `}</span>
+            <CircleCheck className="inline text-[var(--main-color)]" />
           </>
         );
       } else {
         setInputValue('');
         setFeedback(
           <>
-            <span>{`incorrect! ${correctRomajiChar} ≠ ${inputValue} `}</span>
-            <CircleX className="inline" />
+            <span>{`${correctRomajiChar} ≠ ${inputValue} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
           </>
         );
         playErrorTwice();

@@ -101,16 +101,16 @@ const ReverseInput = ({
         setCorrectMeaning(newRandomMeaning);
         setFeedback(
           <>
-            <span>{`correct! ${correctMeaning} = ${inputValue.trim()} `}</span>
-            <CircleCheck className="inline" />
+            <span>{`${correctMeaning} = ${inputValue.trim()} `}</span>
+            <CircleCheck className="inline text-[var(--main-color)]" />
           </>
         );
       } else {
         setInputValue('');
         setFeedback(
           <>
-            <span>{`incorrect! ${correctMeaning} ≠ ${inputValue} `}</span>
-            <CircleX className="inline" />
+            <span>{`${correctMeaning} ≠ ${inputValue} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
           </>
         );
         playErrorTwice();

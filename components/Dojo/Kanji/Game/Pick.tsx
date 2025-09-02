@@ -121,16 +121,16 @@ const Pick = ({
       setWrongSelectedAnswers([]);
       setFeedback(
         <>
-          <span>{`correct! ${correctKanjiChar} = ${meaning} `}</span>
-          <CircleCheck className="inline" />
+          <span>{`${correctKanjiChar} = ${meaning} `}</span>
+          <CircleCheck className="inline text-[var(--main-color)]" />
         </>
       );
     } else {
       setWrongSelectedAnswers([...wrongSelectedAnswers, meaning]);
       setFeedback(
         <>
-          <span>{`incorrect! ${correctKanjiChar} ≠ ${meaning} `}</span>
-          <CircleX className="inline" />
+          <span>{`${correctKanjiChar} ≠ ${meaning} `}</span>
+          <CircleX className="inline text-[var(--main-color)]" />
         </>
       );
       playErrorTwice();

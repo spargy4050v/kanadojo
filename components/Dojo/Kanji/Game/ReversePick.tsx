@@ -128,16 +128,16 @@ const ReversePick = ({
       setWrongSelectedAnswers([]);
       setFeedback(
         <>
-          <span>{`correct! ${correctMeaning} = ${kanjiChar} `}</span>
-          <CircleCheck className="inline" />
+          <span>{`${correctMeaning} = ${kanjiChar} `}</span>
+          <CircleCheck className="inline text-[var(--main-color)]" />
         </>
       );
     } else {
       setWrongSelectedAnswers([...wrongSelectedAnswers, kanjiChar]);
       setFeedback(
         <>
-          <span>{`incorrect! ${correctMeaning} ≠ ${kanjiChar} `}</span>
-          <CircleX className="inline" />
+          <span>{`${correctMeaning} ≠ ${kanjiChar} `}</span>
+          <CircleX className="inline text-[var(--main-color)]" />
         </>
       );
       playErrorTwice();

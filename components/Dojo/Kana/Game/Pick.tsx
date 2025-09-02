@@ -118,16 +118,16 @@ const Pick = ({ isHidden }: { isHidden: boolean }) => {
       setWrongSelectedAnswers([]);
       setFeedback(
         <>
-          <span>{`correct! ${correctKanaChar} = ${correctRomajiChar} `}</span>
-          <CircleCheck className="inline" />
+          <span>{`${correctKanaChar} = ${correctRomajiChar} `}</span>
+          <CircleCheck className="inline text-[var(--main-color)]" />
         </>
       );
     } else {
       setWrongSelectedAnswers([...wrongSelectedAnswers, romajiChar]);
       setFeedback(
         <>
-          <span>{`incorrect! ${correctKanaChar} ≠ ${romajiChar} `}</span>
-          <CircleX className="inline" />
+          <span>{`${correctKanaChar} ≠ ${romajiChar} `}</span>
+          <CircleX className="inline text-[var(--main-color)]" />
         </>
       );
       playErrorTwice();

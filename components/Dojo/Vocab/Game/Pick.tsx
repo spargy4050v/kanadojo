@@ -119,16 +119,16 @@ const Pick = ({
       setWrongSelectedAnswers([]);
       setFeedback(
         <>
-          <span>{`correct! ${correctWord} = ${meaning} `}</span>
-          <CircleCheck className="inline" />
+          <span>{`${correctWord} = ${meaning} `}</span>
+          <CircleCheck className="inline text-[var(--main-color)]" />
         </>
       );
     } else {
       setWrongSelectedAnswers([...wrongSelectedAnswers, meaning]);
       setFeedback(
         <>
-          <span>{`incorrect! ${correctWord} ≠ ${meaning} `}</span>
-          <CircleX className="inline" />
+          <span>{`${correctWord} ≠ ${meaning} `}</span>
+          <CircleX className="inline text-[var(--main-color)]" />
         </>
       );
       playErrorTwice();

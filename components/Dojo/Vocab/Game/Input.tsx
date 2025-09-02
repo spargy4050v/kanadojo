@@ -101,17 +101,17 @@ const Input = ({
         setFeedback(
           <>
             <span>
-              {`correct! ${correctWord} = ${inputValue.trim().toLowerCase()} `}
+              {`${correctWord} = ${inputValue.trim().toLowerCase()} `}
             </span>
-            <CircleCheck className="inline" />
+            <CircleCheck className="inline text-[var(--main-color)]" />
           </>
         );
       } else {
         setInputValue('');
         setFeedback(
           <>
-            <span>{`incorrect! ${correctWord} ≠ ${inputValue} `}</span>
-            <CircleX className="inline" />
+            <span>{`${correctWord} ≠ ${inputValue} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
           </>
         );
         playErrorTwice();

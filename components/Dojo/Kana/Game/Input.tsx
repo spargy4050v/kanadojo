@@ -102,16 +102,16 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
         setCorrectKanaChar(newRandomKana);
         setFeedback(
           <>
-            <span>{`correct! ${correctKanaChar} = ${correctRomajiChar} `}</span>
-            <CircleCheck className="inline" />
+            <span>{`${correctKanaChar} = ${correctRomajiChar} `}</span>
+            <CircleCheck className="inline text-[var(--main-color)]" />
           </>
         );
       } else {
         setInputValue('');
         setFeedback(
           <>
-            <span>{`incorrect! ${correctKanaChar} ≠ ${inputValue} `}</span>
-            <CircleX className="inline" />
+            <span>{`${correctKanaChar} ≠ ${inputValue} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
           </>
         );
         playErrorTwice();

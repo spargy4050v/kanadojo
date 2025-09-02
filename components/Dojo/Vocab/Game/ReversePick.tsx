@@ -121,16 +121,16 @@ const ReversePick = ({
       setWrongSelectedAnswers([]);
       setFeedback(
         <>
-          <span>{`correct! ${correctMeaning} = ${word} `}</span>
-          <CircleCheck className="inline" />
+          <span>{`${correctMeaning} = ${word} `}</span>
+          <CircleCheck className="inline text-[var(--main-color)]" />
         </>
       );
     } else {
       setWrongSelectedAnswers([...wrongSelectedAnswers, word]);
       setFeedback(
         <>
-          <span>{`incorrect! ${correctMeaning} ≠ ${word} `}</span>
-          <CircleX className="inline" />
+          <span>{`${correctMeaning} ≠ ${word} `}</span>
+          <CircleX className="inline text-[var(--main-color)]" />
         </>
       );
       playErrorTwice();

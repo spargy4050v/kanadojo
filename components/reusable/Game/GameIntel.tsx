@@ -54,7 +54,7 @@ const GameIntel = ({
             className={clsx(
               'hover:cursor-pointer duration-250 hover:scale-120',
               'active:scale-100 active:duration-225',
-              'fill-current animate-pulse text-red-500 text-[var(--main-color)]'
+              'fill-current animate-pulse text-red-500 '
             )}
             onClick={() => {
               playClick();

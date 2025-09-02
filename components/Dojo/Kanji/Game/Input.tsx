@@ -95,19 +95,17 @@ const Input = ({
         setFeedback(
           <>
             <span>
-              {`correct! ${correctKanjiChar} = ${inputValue
-                .trim()
-                .toLowerCase()} `}
+              {`${correctKanjiChar} = ${inputValue.trim().toLowerCase()} `}
             </span>
-            <CircleCheck className="inline" />
+            <CircleCheck className="inline text-[var(--main-color)]" />
           </>
         );
       } else {
         setInputValue('');
         setFeedback(
           <>
-            <span>{`incorrect! ${correctKanjiChar} ≠ ${inputValue} `}</span>
-            <CircleX className="inline" />
+            <span>{`${correctKanjiChar} ≠ ${inputValue} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
           </>
         );
         playErrorTwice();

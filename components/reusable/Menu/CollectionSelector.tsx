@@ -11,7 +11,7 @@ import {
   N5VocabLength,
   N4VocabLength,
   N3VocabLength,
-  N2VocabLength,
+  N2VocabLength
 } from '@/static/unitSets';
 import { useClick } from '@/lib/hooks/useAudio';
 import { CircleCheck, Circle } from 'lucide-react';
@@ -21,14 +21,14 @@ const numCollectionSets = {
     n5: Math.ceil(N5KanjiLength / 10),
     n4: Math.ceil(N4KanjiLength / 10),
     n3: Math.ceil(N3KanjiLength / 10),
-    n2: Math.ceil(N2KanjiLength / 10),
+    n2: Math.ceil(N2KanjiLength / 10)
   },
   '/vocabulary': {
     n5: Math.ceil(N5VocabLength / 10),
     n4: Math.ceil(N4VocabLength / 10),
     n3: Math.ceil(N3VocabLength / 10),
-    n2: Math.ceil(N2VocabLength / 10),
-  },
+    n2: Math.ceil(N2VocabLength / 10)
+  }
 };
 
 const CollectionSelector = () => {
@@ -49,7 +49,6 @@ const CollectionSelector = () => {
   );
 
   const selectedKanjiSets = useKanaKanjiStore(state => state.selectedKanjiSets);
-
   const selectedVocabSets = useVocabStore(state => state.selectedVocabSets);
 
   const clearKanjiObjs = useKanaKanjiStore(state => state.clearKanjiObjs);
@@ -79,7 +78,7 @@ const CollectionSelector = () => {
       name: 'n5',
       displayName: `Unit 1, Sets 1-${
         numCollectionSets[pathname as keyof typeof numCollectionSets].n5
-      }`,
+      }`
     },
     {
       name: 'n4',
@@ -88,7 +87,7 @@ const CollectionSelector = () => {
       }-${
         numCollectionSets[pathname as keyof typeof numCollectionSets].n5 +
         numCollectionSets[pathname as keyof typeof numCollectionSets].n4
-      }`,
+      }`
     },
     {
       name: 'n3',
@@ -100,7 +99,7 @@ const CollectionSelector = () => {
         numCollectionSets[pathname as keyof typeof numCollectionSets].n5 +
         numCollectionSets[pathname as keyof typeof numCollectionSets].n4 +
         numCollectionSets[pathname as keyof typeof numCollectionSets].n3
-      }`,
+      }`
     },
     {
       name: 'n2',
@@ -114,12 +113,12 @@ const CollectionSelector = () => {
         numCollectionSets[pathname as keyof typeof numCollectionSets].n4 +
         numCollectionSets[pathname as keyof typeof numCollectionSets].n3 +
         numCollectionSets[pathname as keyof typeof numCollectionSets].n2
-      }`,
-    },
+      }`
+    }
   ];
 
   return (
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       <div
         className={clsx(
           'rounded-tl-2xl rounded-tr-2xl bg-[var(--card-color)]',
@@ -131,10 +130,7 @@ const CollectionSelector = () => {
         )}
       >
         {collections.map((collection, i) => (
-          <div
-            key={i}
-            className={clsx('flex flex-col md:flex-row', 'w-full ')}
-          >
+          <div key={i} className={clsx('flex flex-col md:flex-row', 'w-full ')}>
             <button
               key={i}
               className={clsx(
@@ -168,11 +164,11 @@ const CollectionSelector = () => {
               {i+1}
             </span> */}
               {collection.name === selectedCollection ? (
-                <CircleCheck className="text-[var(--secondary-color)]" />
+                <CircleCheck className='text-[var(--secondary-color)]' />
               ) : (
-                <Circle className="text-[var(--border-color)]" />
+                <Circle className='text-[var(--border-color)]' />
               )}
-              <span className="text-2xl">
+              <span className='text-2xl'>
                 {collection.displayName.split(', ')[0]}
               </span>
               {/* <span className='text-sm text-[var(--secondary-color)] pt-2'>
@@ -204,7 +200,7 @@ const CollectionSelector = () => {
           <CircleCheck className='text-[var(--secondary-color)]' />
           Selected Sets:
         </span>
-        <span className="text-[var(--secondary-color)]">
+        <span className='text-[var(--secondary-color)]'>
           {pathname === '/kanji'
             ? selectedKanjiSets.length > 0
               ? selectedKanjiSets.sort().join(', ')

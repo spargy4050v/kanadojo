@@ -41,7 +41,7 @@ const Themes = () => {
                 ? randomTheme.borderColor
                 : randomTheme.cardColor,
             borderWidth:
-              process.env.NODE_ENV === 'development' ? '1px' : undefined,
+              process.env.NODE_ENV === 'development' ? '2px' : undefined,
             borderColor: randomTheme.borderColor
           }}
           onClick={() => {
@@ -105,7 +105,7 @@ const Themes = () => {
                       ? currentTheme.borderColor
                       : currentTheme.backgroundColor,
                   borderWidth:
-                    process.env.NODE_ENV === 'development' ? '1px' : undefined,
+                    process.env.NODE_ENV === 'development' ? '2px' : undefined,
                   borderColor: currentTheme.borderColor
                 }}
                 onMouseEnter={() => setIsHovered(currentTheme.id)}

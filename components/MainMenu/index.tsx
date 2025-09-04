@@ -187,7 +187,7 @@ const MainMenu = () => {
                     i === links.length - 1 && 'rounded-tr-2xl rounded-br-2xl',
                     'hover:cursor-pointer',
                     'hover:bg-[var(--border-color)]',
-                    'duration-250'
+                    // 'duration-100'
                   )}
                   onClick={() => playClick()}
                 >

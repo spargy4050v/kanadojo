@@ -27,14 +27,14 @@ const Settings = () => {
         <Banner />
         <div className='flex flex-col gap-12 '>
           <div className='flex flex-col gap-4 ' >
-            <h3 className='flex flex-row text-3xl gap-2 items-center border-b-2 border-t-2 py-6 border-[var(--border-color)]'>
+            <h3 className='flex flex-row text-3xl gap-2 items-center border-b-2  py-6 border-[var(--border-color)]'>
               <Joystick />
               <span>Behavior</span>
             </h3>
             <Behavior />
           </div>
           <div className='flex flex-col gap-4'>
-            <h3 className='flex flex-row text-3xl gap-2 items-center border-b-2 border-t-2 py-6 border-[var(--border-color)]'>
+            <h3 className='flex flex-row text-3xl gap-2 items-center border-b-2 py-6 border-[var(--border-color)]'>
               <Palette size={28} />
               <span>Display</span>
             </h3>
@@ -55,7 +55,7 @@ const Settings = () => {
             <h3
               className={clsx(
                 'flex flex-row text-3xl gap-2 items-end',
-                'border-b-2 border-t-2 py-6 border-[var(--border-color)]'
+                'border-b-0  py-6 border-[var(--border-color)]'
               )}
             >
               <Blocks size={32} />

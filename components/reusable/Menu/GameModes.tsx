@@ -1,4 +1,5 @@
 'use client';
+import { Fragment } from 'react';
 import useKanaKanjiStore from '@/store/useKanaKanjiStore';
 import useVocabStore from '@/store/useVocabStore';
 import { MousePointerClick, Keyboard, CircleCheck, Circle } from 'lucide-react';
@@ -66,9 +67,8 @@ const GameModes = () => {
       )}
     >
       {gameModes.map((gameMode, i) => (
-        <>
+        <Fragment key={gameMode}>
           <label
-            key={gameMode}
             className={clsx(
               'flex justify-center items-center',
               'text-[var(--secondary-color)]',
@@ -127,7 +127,7 @@ const GameModes = () => {
               )}
             />
           )}
-        </>
+        </Fragment>
       ))}
     </fieldset>
   );

@@ -3,8 +3,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import ClientLayout from './ClientLayout';
 import './globals.css';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
-import MSClarity from '@/components/analytics/MSClarity';
+import GoogleAnalytics from '@/components/Analytics/GoogleAnalytics';
+import MSClarity from '@/components/Analytics/MSClarity';
 import { Metadata } from 'next';
 
 const googleVerificationToken = process.env.GOOGLE_VERIFICATION_TOKEN || '';

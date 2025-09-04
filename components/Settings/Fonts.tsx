@@ -1,9 +1,14 @@
 'use client';
 import clsx from 'clsx';
+import { useState } from 'react';
 import { useClick } from '@/lib/hooks/useAudio';
 import useThemeStore from '@/store/useThemeStore';
 import { buttonBorderStyles } from '@/static/styles';
 import fonts from '@/static/fonts';
+import { Dice5 } from 'lucide-react';
+import { Random } from 'random-js';
+
+const random = new Random();
 
 const Fonts = () => {
   const { playClick } = useClick();
@@ -11,8 +16,32 @@ const Fonts = () => {
   const currentFont = useThemeStore(state => state.font);
   const setFont = useThemeStore(state => state.setFont);
 
+  const [randomFont, setRandomFont] = useState(
+    fonts[random.integer(0, fonts.length - 1)]
+  );
+
   return (
     <div className='flex flex-col gap-4'>
+      <button
+        className={clsx(
+          'p-6 flex justify-center items-center gap-2 w-1/4',
+          buttonBorderStyles,
+          'text-xl w-full'
+        )}
+        onClick={() => {
+          playClick();
+          const randomFont = fonts[random.integer(0, fonts.length - 1)];
+          setRandomFont(randomFont);
+          setFont(randomFont.name);
+        }}
+      >
+        <span className='mb-0.5'>
+          {randomFont.name === currentFont ? '\u2B24 ' : ''}
+        </span>
+        <Dice5 className='text-[var(--secondary-color)]' />
+        Random Font
+      </button>
+
       <fieldset
         className={clsx('grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4')}
       >
@@ -40,7 +69,9 @@ const Fonts = () => {
               {fontObj.name === currentFont ? '\u2B24 ' : ''}
               {fontObj.name}
               {fontObj.name === 'Zen Maru Gothic' && ' (default)'}
-              <span className='ml-2 text-[var(--secondary-color)]'>かな道場</span>
+              <span className='ml-2 text-[var(--secondary-color)]'>
+                かな道場
+              </span>
             </span>
           </label>
         ))}

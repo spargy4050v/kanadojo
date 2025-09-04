@@ -217,7 +217,7 @@ const CollectionSelector = () => {
         </p>
         <button
           className={clsx(
-            'py-6 md:py-4 px-16',
+            'py-4 px-16',
             miniButtonBorderStyles,
             'text-[var(--main-color)]',
             'w-full',

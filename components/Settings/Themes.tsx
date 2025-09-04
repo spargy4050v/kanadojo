@@ -15,7 +15,8 @@ const Themes = () => {
   const { playClick } = useClick();
   const { playLong } = useLong();
 
-  const { theme, setTheme } = useThemeStore();
+  const selectedTheme = useThemeStore(state => state.theme);
+  const setSelectedTheme = useThemeStore(state => state.setTheme);
 
   const [isHovered, setIsHovered] = useState('');
 
@@ -24,11 +25,11 @@ const Themes = () => {
   );
 
   return (
-    <div className='flex flex-col gap-6 lg:pr-20'>
+    <div className='flex flex-col gap-6'>
       <div className='flex gap-2'>
         <button
           className={clsx(
-            'p-6 flex justify-center items-center gap-2',
+            'p-6 flex justify-center items-center gap-2 w-1/2',
             buttonBorderStyles
           )}
           onMouseEnter={() => setIsHovered(randomTheme.id)}
@@ -38,7 +39,10 @@ const Themes = () => {
             backgroundColor:
               isHovered === randomTheme.id
                 ? randomTheme.borderColor
-                : randomTheme.cardColor
+                : randomTheme.cardColor,
+            borderWidth:
+              process.env.NODE_ENV === 'development' ? '1px' : undefined,
+            borderColor: randomTheme.borderColor
           }}
           onClick={() => {
             playClick();
@@ -47,18 +51,18 @@ const Themes = () => {
                 random.integer(0, themeSets[2].themes.length - 1)
               ];
             setRandomTheme(randomTheme);
-            setTheme(randomTheme.id);
+            setSelectedTheme(randomTheme.id);
           }}
         >
           <span className='mb-0.5'>
-            {randomTheme.id === theme ? '\u2B24 ' : ''}
+            {randomTheme.id === selectedTheme ? '\u2B24 ' : ''}
           </span>
           <Dice5
             style={{
               color: randomTheme.secondaryColor
             }}
           />
-          random
+          Random Theme
         </button>
         {/*
         <button
@@ -99,7 +103,10 @@ const Themes = () => {
                   backgroundColor:
                     isHovered === currentTheme.id
                       ? currentTheme.borderColor
-                      : currentTheme.backgroundColor
+                      : currentTheme.backgroundColor,
+                  borderWidth:
+                    process.env.NODE_ENV === 'development' ? '1px' : undefined,
+                  borderColor: currentTheme.borderColor
                 }}
                 onMouseEnter={() => setIsHovered(currentTheme.id)}
                 onMouseLeave={() => setIsHovered('')}
@@ -117,7 +124,7 @@ const Themes = () => {
                   type='radio'
                   name='selectedTheme'
                   onChange={() => {
-                    setTheme(currentTheme.id);
+                    setSelectedTheme(currentTheme.id);
                     // @ts-expect-error gtag fix
                     if (typeof window.gtag === 'function') {
                       // @ts-expect-error gtag fix
@@ -137,7 +144,9 @@ const Themes = () => {
                   className='hidden'
                 />
                 <span className='text-center text-lg flex items-center gap-1.5'>
-                  <span>{currentTheme.id === theme ? '\u2B24 ' : ''}</span>
+                  <span>
+                    {currentTheme.id === selectedTheme ? '\u2B24 ' : ''}
+                  </span>
                   {currentTheme.id === 'long'
                     ? 'long loooooooong theme'
                     : currentTheme.id.split('-').map((themeNamePart, i) => (

@@ -30,9 +30,8 @@ const info = {
           training mode, then hit <b>Go!</b> below and start training now!
         </p>
         <p className='text-lg italic'>
-          Make sure to check out the preferences menu to customize your learning
-          experience and make{' '}
-          <span className='text-[var(--main-color)]'>KanaDojo</span> uniquely
+          Make sure to check out the preferences menu to{' '}
+          <span className='animate-bounce'>customize</span> KanaDojo and make it
           yours!
         </p>
       </>
@@ -51,10 +50,8 @@ const info = {
           then hit <b>Go!</b> below and start training now!
         </p>
         <p className='text-lg italic'>
-          Make sure to check out the preferences menu to customize your learning
-          experience and make{' '}
-          <span className='text-[var(--main-color)]'>KanaDojo</span> uniquely
-          yours!
+          Make sure to check out the preferences menu to customize KanaDojo and
+          make it yours!
         </p>
       </>
     )
@@ -68,14 +65,12 @@ const info = {
           words used in day-to-day Japanese.
         </p>
         <p className='text-lg text-[var(--secondary-color)]'>
-          To begin, select at least 1 set, select or change the training mode, then
-          hit <b>Go!</b> below and start training now!
+          To begin, select at least 1 set, select or change the training mode,
+          then hit <b>Go!</b> below and start training now!
         </p>
         <p className='text-lg italic'>
-          Make sure to check out the preferences menu to customize your learning
-          experience and make{' '}
-          <span className='text-[var(--main-color)]'>KanaDojo</span> uniquely
-          yours!
+          Make sure to check out the preferences menu to customize KanaDojo and
+          make it yours!
         </p>
       </>
     )

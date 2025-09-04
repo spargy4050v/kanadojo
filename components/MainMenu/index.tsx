@@ -42,8 +42,8 @@ const MainMenu = () => {
     },
     {
       name_en: 'Kanji',
-      // name_ja: '出',
-      name_ja: '間',
+      name_ja: '出',
+      // name_ja: '間',
       href: '/kanji'
     }
 
@@ -69,7 +69,7 @@ const MainMenu = () => {
     >
       {isLG && (
         <Suspense fallback={<></>}>
-          <Decorations />
+          {process.env.NODE_ENV === 'production' && <Decorations />}
         </Suspense>
       )}
       <div

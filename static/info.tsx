@@ -10,8 +10,9 @@ const info = {
           practicing Japanese online.
         </p>
         <p className='text-lg text-[var(--secondary-color)]'>
-          To begin, select a dojo, pick a training mode and start training now!
+          To begin, select a dojo and start training now!
         </p>
+        <i className='text-[var(--secondary-color)] text-xs'>v0.1.1 (alpha)</i>
         <DevNotice />
       </>
     )
@@ -28,7 +29,7 @@ const info = {
           To begin, select at least 1 group of characters, select or change the
           training mode, then hit <b>Go!</b> below and start training now!
         </p>
-        <p className='text-lg text-[var(--secondary-color)] italic'>
+        <p className='text-lg italic'>
           Make sure to check out the preferences menu to customize your learning
           experience and make{' '}
           <span className='text-[var(--main-color)]'>KanaDojo</span> uniquely
@@ -49,7 +50,7 @@ const info = {
           To begin, select at least 1 set, select or change the training mode,
           then hit <b>Go!</b> below and start training now!
         </p>
-        <p className='text-lg text-[var(--secondary-color)] italic'>
+        <p className='text-lg italic'>
           Make sure to check out the preferences menu to customize your learning
           experience and make{' '}
           <span className='text-[var(--main-color)]'>KanaDojo</span> uniquely
@@ -70,7 +71,7 @@ const info = {
           To begin, select at least 1 set, select or change the training mode, then
           hit <b>Go!</b> below and start training now!
         </p>
-        <p className='text-lg text-[var(--secondary-color)] italic'>
+        <p className='text-lg italic'>
           Make sure to check out the preferences menu to customize your learning
           experience and make{' '}
           <span className='text-[var(--main-color)]'>KanaDojo</span> uniquely

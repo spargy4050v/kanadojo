@@ -104,7 +104,7 @@ const GameIntel = ({
 
         <div
           className={clsx(
-            'flex flex-row gap-3 items-center justify-center p-4'
+            'flex flex-row gap-3 items-center justify-center px-4 py-2'
           )}
         >
           <p className='text-xl flex flex-row items-center gap-1'>
@@ -139,7 +139,12 @@ const GameIntel = ({
           </button>
         </div>
       </div>
-      <p className='p-4 border-t-1 w-full border-[var(--border-color)] flex gap-2  items-center'>
+      <p
+        className={clsx(
+          'p-4 border-t-1 w-full border-[var(--border-color)] flex gap-2  items-center',
+          trainingDojo === 'kana' && 'hidden'
+        )}
+      >
         <span className='flex gap-2 items-center'>
           <MousePointer size={20} className='text-[var(--main-color)]' />
           selected sets:

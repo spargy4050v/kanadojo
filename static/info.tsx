@@ -1,8 +1,14 @@
 import DevNotice from '@/components/reusable/DevNotice';
+import Link from 'next/link';
 
 const info = {
   '/': {
-    header: <span>Welcome to KanaDojo!</span>,
+    header: (
+      <p className='flex gap-2 items-center'>
+        <span>Welcome to KanaDojo!</span>
+        <i className='text-[var(--secondary-color)] text-xs mt-1 max-md:hidden'>v0.1.1 (alpha)</i>
+      </p>
+    ),
     content: (
       <>
         <p className='text-lg text-[var(--secondary-color)]'>
@@ -12,7 +18,20 @@ const info = {
         <p className='text-lg text-[var(--secondary-color)]'>
           To begin, select a dojo and start training now!
         </p>
-        <i className='text-[var(--secondary-color)] text-xs'>v0.1.1 (alpha)</i>
+        <p className='text-sm text-[var(--secondary-color)]'>
+          Want to support an independent project built by the community, for the
+          community, and help KanaDojo continue growing? Then please consider
+          donating{' '}
+          <Link
+            href='https://ko-fi.com/kanadojo'
+            target='_blank'
+            className='underline'
+          >
+            here
+          </Link>{' '}
+          - thank you!
+        </p>
+        <i className='text-[var(--secondary-color)] text-xs md:hidden'>v0.1.1 (alpha)</i>
         <DevNotice />
       </>
     )
@@ -32,7 +51,7 @@ const info = {
         <p className='text-lg italic'>
           Make sure to check out the preferences menu to{' '}
           <span className='animate-bounce'>customize</span> KanaDojo and make it
-          yours!
+          your own!
         </p>
       </>
     )
@@ -51,7 +70,7 @@ const info = {
         </p>
         <p className='text-lg italic'>
           Make sure to check out the preferences menu to customize KanaDojo and
-          make it yours!
+          make it your own!
         </p>
       </>
     )
@@ -70,7 +89,7 @@ const info = {
         </p>
         <p className='text-lg italic'>
           Make sure to check out the preferences menu to customize KanaDojo and
-          make it yours!
+          make it your own!
         </p>
       </>
     )

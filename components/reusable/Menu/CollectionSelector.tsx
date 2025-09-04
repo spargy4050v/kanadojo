@@ -14,7 +14,8 @@ import {
   N2VocabLength
 } from '@/static/unitSets';
 import { useClick } from '@/lib/hooks/useAudio';
-import { CircleCheck, Circle } from 'lucide-react';
+import { CircleCheck, Circle, Trash } from 'lucide-react';
+import { miniButtonBorderStyles } from '@/static/styles';
 
 const numCollectionSets = {
   '/kanji': {
@@ -49,6 +50,7 @@ const CollectionSelector = () => {
   );
 
   const selectedKanjiSets = useKanaKanjiStore(state => state.selectedKanjiSets);
+
   const selectedVocabSets = useVocabStore(state => state.selectedVocabSets);
 
   const clearKanjiObjs = useKanaKanjiStore(state => state.clearKanjiObjs);
@@ -188,30 +190,53 @@ const CollectionSelector = () => {
           </div>
         ))}
       </div>
-      <p
+      <div
         className={clsx(
-          'rounded-bl-2xl rounded-br-2xl bg-[var(--card-color)] p-6',
+          'rounded-bl-2xl rounded-br-2xl bg-[var(--card-color)] p-4',
           'w-full',
           'text-lg',
-          'flex gap-2'
+          'flex flex-col gap-2 items-start '
         )}
       >
-        <span className='flex gap-2 items-center'>
-          <CircleCheck className='text-[var(--secondary-color)]' />
-          Selected Sets:
-        </span>
-        <span className='text-[var(--secondary-color)]'>
-          {pathname === '/kanji'
-            ? selectedKanjiSets.length > 0
-              ? selectedKanjiSets.sort().join(', ')
-              : 'None'
-            : pathname === '/vocabulary'
-            ? selectedVocabSets.length > 0
-              ? selectedVocabSets.sort().join(', ')
-              : 'None'
-            : null}
-        </span>
-      </p>
+        <p className='flex flex-col'>
+          <span className='flex gap-2 items-center'>
+            <CircleCheck className='text-[var(--secondary-color)]' />
+            Selected Sets:
+          </span>
+          <span className='text-[var(--secondary-color)]'>
+            {pathname === '/kanji'
+              ? selectedKanjiSets.length > 0
+                ? selectedKanjiSets.sort().join(', ')
+                : 'None'
+              : pathname === '/vocabulary'
+              ? selectedVocabSets.length > 0
+                ? selectedVocabSets.sort().join(', ')
+                : 'None'
+              : null}
+          </span>
+        </p>
+        <button
+          className={clsx(
+            'py-6 md:py-4 px-16',
+            miniButtonBorderStyles,
+            'text-[var(--main-color)]',
+            'w-full',
+            'flex justify-center'
+          )}
+          onClick={() => {
+            playClick();
+            if (pathname === '/kanji') {
+              clearKanjiSets();
+              clearKanjiObjs();
+            } else if (pathname === '/vocabulary') {
+              clearVocabSets();
+              clearWordObjs();
+            }
+          }}
+        >
+          <Trash size={32} />
+        </button>
+      </div>
     </div>
   );
 };

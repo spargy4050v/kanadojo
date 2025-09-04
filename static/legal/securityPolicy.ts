@@ -5,13 +5,11 @@ const securityPolicy = `
 
 At **KanaDojo**, we take security seriously and strive to protect our website and users from potential threats. Although our website does not collect personal user data directly, we implement security measures to safeguard our platform.
 
----
 
 ## 1. Scope
 
 This Security Policy applies to the **KanaDojo** website (kanadojo.com), including its infrastructure, content, and third-party services used (such as Google Analytics).
 
----
 
 ## 2. Website Security Practices
 
@@ -22,7 +20,6 @@ To ensure the security of our website, we:
 - Monitor for unauthorized access, potential threats, and security issues.
 - Restrict administrative access to trusted personnel only.
 
----
 
 ## 3. Data Security & Privacy
 
@@ -34,7 +31,6 @@ To enhance data security:
 - Google Analytics data is handled under [Google’s Privacy Policy](https://policies.google.com/privacy).
 - We allow users to **opt out of Google Analytics tracking** using browser settings or the [Google Analytics Opt-Out Add-on](https://tools.google.com/dlpage/gaoptout).
 
----
 
 ## 4. Handling Security Vulnerabilities
 
@@ -49,7 +45,6 @@ If you believe you have found a security issue, please contact us immediately vi
 
 We appreciate **ethical hacking and responsible disclosure** and will investigate reported vulnerabilities promptly.
 
----
 
 ## 5. Third-Party Services & Dependencies
 
@@ -57,7 +52,6 @@ We utilize third-party services (e.g., Google Analytics) that have their **own s
 
 Users visiting external links (e.g., third-party resources) should review those websites’ security policies.
 
----
 
 ## 6. Future Improvements
 
@@ -67,13 +61,11 @@ We are committed to improving our security measures by:
 - Updating dependencies and performing security audits.
 - Monitoring and mitigating emerging threats to ensure a safe browsing experience.
 
----
 
 ## 7. Changes to This Security Policy
 
 We may update this Security Policy from time to time. Any changes will be **published on this page with an updated effective date**. Please review this policy periodically to stay informed about our security practices.
 
----
 
 ## 8. Contact Information  
 

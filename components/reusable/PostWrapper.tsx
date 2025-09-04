@@ -1,16 +1,25 @@
+import clsx from 'clsx';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Banner from './Menu/Banner';
+import { buttonBorderStyles } from '@/static/styles';
+import { ChevronsLeft } from 'lucide-react';
+import Link from 'next/link';
 
 const PostWrapper = ({ textContent }: { textContent: string }) => {
   return (
-    <div className='min-h-[100dvh] max-w-[100dvw] px-4 sm:px-8 md:px-20 xl:px-66'>
+    <div className='min-h-[100dvh] max-w-[100dvw] px-4 pb-10 sm:px-8 md:px-20 xl:px-66'>
       <Banner />
+      <Link href='/'>
+        <button className={clsx(buttonBorderStyles, 'py-4 px-16')}>
+          <ChevronsLeft />
+        </button>
+      </Link>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
           h1: props => (
-            <h1 className='text-3xl font-bold mt-5 pb-3' {...props} />
+            <h1 className='text-3xl font-bold mt-4 pb-3' {...props} />
           ),
           h2: props => (
             <h2 className='text-2xl font-semibold mt-4 pb-2' {...props} />
@@ -26,7 +35,7 @@ const PostWrapper = ({ textContent }: { textContent: string }) => {
           ),
           ul: props => (
             <ul
-              className='list-disc list-inside pb-4 text-[var(--secondary-color)]'
+              className='list-disc list-inside pb-2 text-[var(--secondary-color)]'
               {...props}
             />
           ),

@@ -38,7 +38,7 @@ const vocabCollections = {
   }
 };
 
-const WordClass = () => {
+const VocabCards = () => {
   const selectedVocabCollectionName = useVocabStore(
     state => state.selectedVocabCollection
   );
@@ -201,4 +201,4 @@ const WordClass = () => {
   );
 };
 
-export default WordClass;
+export default VocabCards;

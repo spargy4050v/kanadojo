@@ -34,7 +34,7 @@ const kanjiCollections = {
   }
 };
 
-const Subgroup = () => {
+const KanjiCards = () => {
   const selectedKanjiCollectionName = useKanaKanjiStore(
     state => state.selectedKanjiCollection
   );
@@ -197,4 +197,4 @@ const Subgroup = () => {
   );
 };
 
-export default Subgroup;
+export default KanjiCards;

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { House, Settings } from 'lucide-react';
+import { House, Sparkles } from 'lucide-react';
 import clsx from 'clsx';
 import { useClick } from '@/lib/hooks/useAudio';
 import { useEffect, useRef } from 'react';
@@ -121,7 +121,7 @@ const Sidebar = () => {
         )}
         onClick={playClick}
       >
-        <Settings className='' />
+        <Sparkles className='' />
         <span className='max-lg:hidden'>Preferences</span>
       </Link>
     </div>

@@ -31,7 +31,7 @@ const info = {
           </Link>{' '}
           - thank you!
         </p>
-        <i className='text-[var(--secondary-color)] text-xs md:hidden'>v0.1.1 (alpha)</i>
+        {/* <i className='text-[var(--secondary-color)] text-xs md:hidden'>v0.1.1 (alpha)</i> */}
         <DevNotice />
       </>
     )

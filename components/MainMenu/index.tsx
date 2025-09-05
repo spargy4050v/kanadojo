@@ -1,5 +1,5 @@
 'use client';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import Link from 'next/link';
 import Banner from './Banner';
 import Info from '@/components/reusable/Menu/Info';
@@ -10,7 +10,8 @@ import {
   // FileDiff,
   Sun,
   Moon,
-  Heart
+  Heart,
+  Sparkle
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -18,6 +19,7 @@ import clsx from 'clsx';
 import { useClick } from '@/lib/hooks/useAudio';
 import useThemeStore from '@/store/useThemeStore';
 import { useMediaQuery } from 'react-responsive';
+import { buttonBorderStyles } from '@/static/styles';
 
 const Decorations = lazy(() => import('./Decorations'));
 
@@ -28,6 +30,8 @@ const MainMenu = () => {
   const setTheme = useThemeStore(state => state.setTheme);
 
   const { playClick } = useClick();
+
+  const [expandDecorations, setExpandDecorations] = useState(false);
 
   const links = [
     {
@@ -69,13 +73,28 @@ const MainMenu = () => {
     >
       {isLG && (
         <Suspense fallback={<></>}>
-          {process.env.NODE_ENV === 'production' && <Decorations />}
+          {/* {process.env.NODE_ENV === 'production' && <Decorations />} */}
+          <Decorations expandDecorations={expandDecorations} />
+          <button
+            className={clsx(
+              'fixed top-4 right-8 z-50',
+              buttonBorderStyles,
+              'p-2.5 opacity-90'
+            )}
+            onClick={() => {
+              playClick();
+              setExpandDecorations(expandDecorations => !expandDecorations);
+            }}
+          >
+            <Sparkle />
+          </button>
         </Suspense>
       )}
       <div
         className={clsx(
           'max-md:pt-4 pb-16 flex flex-col items-center md:justify-center gap-4 px-4 w-full sm:w-3/4 lg:w-1/2 3xl:w-2/5 ',
-          'opacity-90 z-50'
+          'opacity-90 z-50',
+          expandDecorations && 'hidden'
         )}
       >
         <div className='flex flex-row justify-between items-center w-full px-1 gap-2'>
@@ -186,7 +205,7 @@ const MainMenu = () => {
                     i === 0 && 'rounded-tl-2xl rounded-bl-2xl',
                     i === links.length - 1 && 'rounded-tr-2xl rounded-br-2xl',
                     'hover:cursor-pointer',
-                    'hover:bg-[var(--border-color)]',
+                    'hover:bg-[var(--border-color)]'
                     // 'duration-100'
                   )}
                   onClick={() => playClick()}
@@ -220,7 +239,8 @@ const MainMenu = () => {
         className={clsx(
           'fixed bottom-3 flex flex-row gap-2',
           'bg-[var(--card-color)] rounded-xl z-50',
-          'opacity-90'
+          'opacity-90',
+          expandDecorations && 'hidden'
         )}
       >
         {legalLinks.map((link, i) => (

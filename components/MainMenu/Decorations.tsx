@@ -87,7 +87,7 @@ const Decorations = ({ expandDecorations }: { expandDecorations: boolean }) => {
     <div
       className={clsx(
         'fixed inset-0 overflow-hidden pointer-events-none ',
-        expandDecorations ? 'opacity-100' : 'opacity-25'
+        expandDecorations ? 'opacity-100' : 'opacity-30'
       )}
     >
       <div className='grid grid-cols-28 gap-0.5 p-2 h-full w-full'>

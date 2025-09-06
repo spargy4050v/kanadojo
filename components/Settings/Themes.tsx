@@ -29,7 +29,7 @@ const Themes = () => {
       <div className='flex gap-2'>
         <button
           className={clsx(
-            'p-6 flex justify-center items-center gap-2 w-1/2',
+            'p-6 flex justify-center items-center gap-2 w-full md:w-1/2',
             buttonBorderStyles
           )}
           onMouseEnter={() => setIsHovered(randomTheme.id)}

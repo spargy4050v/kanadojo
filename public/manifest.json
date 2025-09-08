@@ -1,0 +1,16 @@
+{
+  "name": "KanaDojo (かな道場)",
+  "short_name": "KanaDojo",
+  "description": "KanaDojo is a fun, minimalist, aesthetic platform for learning and practicing Japanese online.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

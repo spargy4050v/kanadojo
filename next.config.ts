@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { NextConfig } from 'next';
+import withPWA from 'next-pwa';
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  // Your existing Next.js config here
 };
 
-export default nextConfig;
+export default withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+})(nextConfig);

@@ -11,6 +11,9 @@ const googleVerificationToken = process.env.GOOGLE_VERIFICATION_TOKEN || '';
 const msVerificationToken = process.env.MS_VERIFICATION_TOKEN || '';
 
 export const metadata: Metadata = {
+  manifest: '/manifest.json',
+
+
   viewport:
     'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
   title: 'KanaDojo',
@@ -44,17 +47,12 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <head>
+      {/* It's recommended to remove the <head> tag here, as Next.js 13+ with the App Router manages it via the metadata object */}
+      <body>
         {isAnalyticsEnabled && (
           <>
             <GoogleAnalytics />
             <MSClarity />
-          </>
-        )}
-      </head>
-      <body>
-        {isAnalyticsEnabled && (
-          <>
             <Analytics />
             <SpeedInsights />
           </>

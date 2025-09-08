@@ -14,6 +14,62 @@ body {
   scroll-behavior: smooth;
 }
 
+button, .button, [role="button"] {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s; /* Smooths out buttons instead of an instant color change */
+}
+ /* Smooths dropdown toggle */
+.dropdown-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.08s cubic-bezier(0.4,0,0.2,1), opacity 0.05s;
+  will-change: max-height, opacity;
+}
+/* This doesn't work right now but I've left it in to fix later */
+/* .dropdown {
+  transition: height 0.3s cubic-bezier(0.4,0,0.2,1);
+  will-change: height;
+} */
+
+.dropdown.open .dropdown-content {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* Provides a nicer looking checkbox to replace browser defaults */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--card-color);
+  border: 2px solid var(--border-color);
+  width: 1.1em;
+  height: 1.1em;
+  border-radius: 0.25em;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--main-color);
+  border-color: var(--main-color);
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0.28em;
+  top: 0.05em;
+  width: 0.3em;
+  height: 0.6em;
+  border: solid var(--background-color);
+  border-width: 0 0.18em 0.18em 0;
+  transform: rotate(45deg);
+}
+
 :root {
   /* Default theme (using light theme as default) */
   --background-color: hsla(210, 17%, 100%, 1);

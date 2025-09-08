@@ -47,7 +47,6 @@ const MainMenu = () => {
     {
       name_en: 'Kanji',
       name_ja: '字',
-      // name_ja: '間',
       href: '/kanji'
     }
 

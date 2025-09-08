@@ -11,7 +11,8 @@ import {
   Sun,
   Moon,
   Heart,
-  Sparkle
+  Sparkle,
+  Settings
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -61,7 +62,8 @@ const MainMenu = () => {
   const legalLinks = [
     { name: 'terms', href: '/terms', icon: ScrollText },
     { name: 'privacy', href: '/privacy', icon: Cookie },
-    { name: 'security', href: '/security', icon: FileLock2 }
+    { name: 'security', href: '/security', icon: FileLock2 },
+    { name: 'preferences', href: '/preferences', icon: Settings },
     // { name: 'patch notes', href: '/patch-notes', icon: FileDiff }
   ];
 

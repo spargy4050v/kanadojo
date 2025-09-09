@@ -14,9 +14,7 @@ body {
   scroll-behavior: smooth;
 }
 
-button, .button, [role="button"] {
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s; /* Smooths out buttons instead of an instant color change */
-}
+
  /* Smooths dropdown toggle */
 .dropdown-content {
   max-height: 0;

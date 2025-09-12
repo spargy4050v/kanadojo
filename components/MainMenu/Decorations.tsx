@@ -17,7 +17,8 @@ const shuffledKanjiList = kanjiList.sort(() => Math.random() - 0.5);
 
 // Tailwind animations
 const animations = [
-  'motion-safe:animate-pulse'
+  ''
+  // 'motion-safe:animate-pulse'
   // 'animate-bounce',
   //   'animate-ping',
   //   'animate-spin',

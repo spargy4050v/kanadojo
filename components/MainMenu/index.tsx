@@ -72,8 +72,7 @@ const MainMenu = () => {
     >
       {isLG && (
         <Suspense fallback={<></>}>
-          {/* {process.env.NODE_ENV === 'production' && <Decorations />} */}
-          <Decorations expandDecorations={expandDecorations} />
+          {process.env.NODE_ENV === 'production' && <Decorations expandDecorations={expandDecorations}/>}
           <button
             className={clsx(
               'fixed top-4 right-8 z-50',

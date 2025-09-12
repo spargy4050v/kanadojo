@@ -32,166 +32,224 @@ import {
 const notoSansJP = Noto_Sans_JP({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const zenMaruGothic = Zen_Maru_Gothic({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: true,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const rampartOne = Rampart_One({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const zenKurenaido = Zen_Kurenaido({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const kleeOne = Klee_One({
   subsets: ['latin'],
   weight: ['400'],
   display: 'swap'
+  ,
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const dotGothic16 = DotGothic16({
   subsets: ['latin'],
   weight: ['400'],
   display: 'swap'
+  ,
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const kiwiMaru = Kiwi_Maru({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const pottaOne = Potta_One({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const hachiMaruPop = Hachi_Maru_Pop({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const yujiMai = Yuji_Mai({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const rocknRollOne = RocknRoll_One({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const reggaeOne = Reggae_One({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const stick = Stick({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const mPlusRounded1c = M_PLUS_Rounded_1c({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const mPlus1 = M_PLUS_1({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const yuseiMagic = Yusei_Magic({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 const delaGothicOne = Dela_Gothic_One({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 const newTegomin = New_Tegomin({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 const kosugiMaru = Kosugi_Maru({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const hinaMincho = Hina_Mincho({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const shipporiMincho = Shippori_Mincho({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const kaiseiDecol = Kaisei_Decol({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const mochiyPopOne = Mochiy_Pop_One({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const yujiBoku = Yuji_Boku({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const kaiseiHarunoUmi = Kaisei_HarunoUmi({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const sawarabiGothic = Sawarabi_Gothic({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const zenOldMincho = Zen_Old_Mincho({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const sawarabiMincho = Sawarabi_Mincho({
   subsets: ['latin'],
   weight: ['400'],
-  display: 'swap'
+  display: 'swap',
+  preload: false,
+  fallback: ['system-ui', 'sans-serif']
 });
 
 const fonts = [

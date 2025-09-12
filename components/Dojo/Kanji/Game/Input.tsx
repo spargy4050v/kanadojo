@@ -14,13 +14,13 @@ import Stars from '@/components/reusable/Game/Stars';
 
 const random = new Random();
 
-const Input = ({
-  selectedKanjiObjs,
-  isHidden,
-}: {
+interface KanjiInputGameProps {
   selectedKanjiObjs: IKanjiObj[];
   isHidden: boolean;
-}) => {
+  isReverse?: boolean;
+}
+
+const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: KanjiInputGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -38,19 +38,34 @@ const Input = ({
   const { playCorrect } = useCorrect();
   const { playErrorTwice } = useError();
 
-  const [inputValue, setInputValue] = useState('');
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [correctKanjiChar, setCorrectKanjiChar] = useState(
-    selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)].kanjiChar
+  const [inputValue, setInputValue] = useState('');
+
+  // State management based on mode
+  const [correctChar, setCorrectChar] = useState(
+    isReverse
+      ? selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)].meanings[0]
+      : selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)].kanjiChar
   );
 
-  const correctMeanings = selectedKanjiObjs.find(
-    obj => obj.kanjiChar === correctKanjiChar
-  )?.meanings as string[];
+  // Find the target character/meaning based on mode
+  const correctObj = isReverse
+    ? selectedKanjiObjs.find(obj => obj.meanings[0] === correctChar)
+    : selectedKanjiObjs.find(obj => obj.kanjiChar === correctChar);
+
+  const targetChar = isReverse
+    ? correctObj?.kanjiChar
+    : correctObj?.meanings;
 
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -72,99 +87,128 @@ const Input = ({
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (correctMeanings.includes(inputValue.trim().toLowerCase())) {
-        speedStopwatch.pause();
-        addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
-        speedStopwatch.reset();
-        playCorrect();
-        addCharacterToHistory(correctKanjiChar);
-        incrementCharacterScore(correctKanjiChar, 'correct');
-        incrementCorrectAnswers();
-        setScore(score + 1);
-
-        setInputValue('');
-        let newRandomKanjiChar =
-          selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
-            .kanjiChar;
-        while (newRandomKanjiChar === correctKanjiChar) {
-          newRandomKanjiChar =
-            selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
-              .kanjiChar;
-        }
-        setCorrectKanjiChar(newRandomKanjiChar);
-        setFeedback(
-          <>
-            <span>
-              {`${correctKanjiChar} = ${inputValue.trim().toLowerCase()} `}
-            </span>
-            <CircleCheck className="inline text-[var(--main-color)]" />
-          </>
-        );
+      if (isInputCorrect(inputValue.trim())) {
+        handleCorrectAnswer(inputValue.trim());
       } else {
-        setInputValue('');
-        setFeedback(
-          <>
-            <span>{`${correctKanjiChar} ≠ ${inputValue} `}</span>
-            <CircleX className="inline text-[var(--main-color)]" />
-          </>
-        );
-        playErrorTwice();
-
-        incrementCharacterScore(correctKanjiChar, 'wrong');
-        incrementWrongAnswers();
-        if (score - 1 < 0) {
-          setScore(0);
-        } else {
-          setScore(score - 1);
-        }
+        handleWrongAnswer();
       }
     }
+  };
+
+  const isInputCorrect = (input: string): boolean => {
+    if (!isReverse) {
+      // Normal mode: input should match any of the meanings (case insensitive)
+      return Array.isArray(targetChar) && targetChar.includes(input.toLowerCase());
+    } else {
+      // Reverse mode: input should match the exact kanji character
+      return input === targetChar;
+    }
+  };
+
+  const handleCorrectAnswer = (userInput: string) => {
+    speedStopwatch.pause();
+    addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
+    speedStopwatch.reset();
+    playCorrect();
+    addCharacterToHistory(correctChar);
+    incrementCharacterScore(correctChar, 'correct');
+    incrementCorrectAnswers();
+    setScore(score + 1);
+
+    setInputValue('');
+    generateNewCharacter();
+    setFeedback(
+      <>
+        <span>{`${correctChar} = ${userInput} `}</span>
+        <CircleCheck className="inline text-[var(--main-color)]" />
+      </>
+    );
+  };
+
+  const handleWrongAnswer = () => {
+    setInputValue('');
+    setFeedback(
+      <>
+        <span>{`${correctChar} ≠ ${inputValue} `}</span>
+        <CircleX className="inline text-[var(--main-color)]" />
+      </>
+    );
+    playErrorTwice();
+
+    incrementCharacterScore(correctChar, 'wrong');
+    incrementWrongAnswers();
+    if (score - 1 < 0) {
+      setScore(0);
+    } else {
+      setScore(score - 1);
+    }
+  };
+
+  const generateNewCharacter = () => {
+    const sourceArray = isReverse
+      ? selectedKanjiObjs.map(obj => obj.meanings[0])
+      : selectedKanjiObjs.map(obj => obj.kanjiChar);
+    
+    let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    while (newChar === correctChar) {
+      newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    }
+    setCorrectChar(newChar);
   };
 
   const handleSkip = (e: React.MouseEvent<HTMLButtonElement>) => {
     playClick();
     e.currentTarget.blur();
     setInputValue('');
-    let newRandomKanjiChar =
-      selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
-        .kanjiChar;
-    while (newRandomKanjiChar === correctKanjiChar) {
-      newRandomKanjiChar =
-        selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
-          .kanjiChar;
-    }
-    setCorrectKanjiChar(newRandomKanjiChar);
-    setFeedback(<>{`skipped ~ ${correctKanjiChar} = ${correctMeanings[0]}`}</>);
+    generateNewCharacter();
+    
+    const displayTarget = isReverse 
+      ? targetChar 
+      : Array.isArray(targetChar) ? targetChar[0] : targetChar;
+    
+    setFeedback(<>{`skipped ~ ${correctChar} = ${displayTarget}`}</>);
   };
+
+  const gameMode = isReverse ? 'reverse input' : 'input';
+  const displayCharLang = isReverse ? 'en' : 'ja';
+  const inputLang = isReverse ? 'ja' : 'en';
+  const textSize = isReverse ? 'text-6xl sm:text-8xl' : 'text-8xl sm:text-9xl';
+  const gapSize = isReverse ? 'gap-6 sm:gap-10' : 'gap-4 sm:gap-10';
 
   return (
     <div
       className={clsx(
-        'flex flex-col gap-4 sm:gap-10 items-center w-full sm:w-4/5',
+        'flex flex-col items-center w-full sm:w-4/5',
+        gapSize,
         isHidden ? 'hidden' : ''
       )}
     >
       <GameIntel
         feedback={feedback}
-        gameMode="input"
+        gameMode={gameMode}
       />
+      
       <p
-        className="text-8xl sm:text-9xl"
-        lang="ja"
+        className={textSize}
+        lang={displayCharLang}
       >
-        {correctKanjiChar}
+        {correctChar}
       </p>
+      
       <input
+        ref={inputRef}
         type="text"
         value={inputValue}
         className={clsx(
-          'border-b-2 pb-1 text-center  focus:outline-none  text-2xl lg:text-5xl',
+          'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
           'border-[var(--card-color)] focus:border-[var(--border-color)]'
         )}
         onChange={e => setInputValue(e.target.value)}
         onKeyDown={handleEnter}
-        autoFocus
+        lang={inputLang}
+        autoFocus={!isReverse}
       />
+      
       <button
         ref={buttonRef}
         className={clsx(
@@ -185,4 +229,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default KanjiInputGame;

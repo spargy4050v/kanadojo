@@ -1,8 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { useState, useEffect, useRef } from 'react';
-import { CircleCheck } from 'lucide-react';
-import { CircleX } from 'lucide-react';
+import { CircleCheck, CircleX } from 'lucide-react';
 import { Random } from 'random-js';
 import { IKanjiObj } from '@/store/useKanaKanjiStore';
 import { useCorrect, useError } from '@/lib/hooks/useAudio';
@@ -16,13 +15,17 @@ import Stars from '@/components/reusable/Game/Stars';
 
 const random = new Random();
 
-const Pick = ({
-  selectedKanjiObjs,
-  isHidden,
-}: {
+interface KanjiPickGameProps {
   selectedKanjiObjs: IKanjiObj[];
   isHidden: boolean;
-}) => {
+  isReverse?: boolean;
+}
+
+const KanjiPickGame = ({
+  selectedKanjiObjs,
+  isHidden,
+  isReverse = false
+}: KanjiPickGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -33,55 +36,78 @@ const Pick = ({
     incrementWrongAnswers,
     addCharacterToHistory,
     addCorrectAnswerTime,
-    incrementCharacterScore,
+    incrementCharacterScore
   } = useStats();
 
   const { playCorrect } = useCorrect();
   const { playErrorTwice } = useError();
 
-  const [correctKanjiChar, setCorrectKanjiChar] = useState(
-    selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)].kanjiChar
+  // State management based on mode
+  const [correctChar, setCorrectChar] = useState(
+    isReverse
+      ? selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
+          .meanings[0]
+      : selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
+          .kanjiChar
   );
 
-  const correctMeaning = selectedKanjiObjs.find(
-    obj => obj.kanjiChar === correctKanjiChar
-  )?.meanings[0];
+  // Find the correct object based on the current mode
+  const correctKanjiObj = isReverse
+    ? selectedKanjiObjs.find(obj => obj.meanings[0] === correctChar)
+    : selectedKanjiObjs.find(obj => obj.kanjiChar === correctChar);
 
-  const incorrectKanjiObjs = selectedKanjiObjs.filter(
-    currentKanjiObj => currentKanjiObj.kanjiChar !== correctKanjiChar
-  );
+  const targetChar = isReverse
+    ? correctKanjiObj?.kanjiChar
+    : correctKanjiObj?.meanings[0];
 
-  const randomIncorrectMeanings = incorrectKanjiObjs
-    .map(currentIncorrectKanjiObj => currentIncorrectKanjiObj.meanings[0])
-    .sort(() => random.real(0, 1) - 0.5)
-    .slice(0, 2);
+  // Get incorrect options based on mode
+  const getIncorrectOptions = () => {
+    if (!isReverse) {
+      const incorrectKanjiObjs = selectedKanjiObjs.filter(
+        currentKanjiObj => currentKanjiObj.kanjiChar !== correctChar
+      );
+      return incorrectKanjiObjs
+        .map(obj => obj.meanings[0])
+        .sort(() => random.real(0, 1) - 0.5)
+        .slice(0, 2);
+    } else {
+      const incorrectKanjiObjs = selectedKanjiObjs.filter(
+        currentKanjiObj => currentKanjiObj.meanings[0] !== correctChar
+      );
+      return incorrectKanjiObjs
+        .map(obj => obj.kanjiChar)
+        .sort(() => random.real(0, 1) - 0.5)
+        .slice(0, 2);
+    }
+  };
 
-  const [shuffledMeanings, setShuffledMeanings] = useState(
-    [correctMeaning, ...randomIncorrectMeanings].sort(
+  const randomIncorrectOptions = getIncorrectOptions();
+
+  const [shuffledOptions, setShuffledOptions] = useState(
+    [targetChar, ...randomIncorrectOptions].sort(
       () => random.real(0, 1) - 0.5
     ) as string[]
   );
 
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
-
   const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>(
     []
   );
 
   useEffect(() => {
-    setShuffledMeanings(
-      [correctMeaning, ...randomIncorrectMeanings].sort(
+    setShuffledOptions(
+      [targetChar, ...getIncorrectOptions()].sort(
         () => random.real(0, 1) - 0.5
       ) as string[]
     );
-  }, [correctKanjiChar]);
+  }, [correctChar]);
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const index = pickGameKeyMappings[event.code];
-      if (index !== undefined && index < shuffledMeanings.length) {
+      if (index !== undefined && index < shuffledOptions.length) {
         buttonRefs.current[index]?.click();
       }
     };
@@ -97,100 +123,110 @@ const Pick = ({
     if (isHidden) speedStopwatch.pause();
   }, [isHidden]);
 
-  const handleOptionClick = (meaning: string) => {
-    if (meaning === correctMeaning) {
-      speedStopwatch.pause();
-      addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
-      speedStopwatch.reset();
-      playCorrect();
-      addCharacterToHistory(correctKanjiChar);
-      incrementCharacterScore(correctKanjiChar, 'correct');
-      incrementCorrectAnswers();
-      setScore(score + 1);
-
-      let newRandomKanjiChar =
-        selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
-          .kanjiChar;
-
-      while (newRandomKanjiChar === correctKanjiChar) {
-        newRandomKanjiChar =
-          selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
-            .kanjiChar;
-      }
-      setCorrectKanjiChar(newRandomKanjiChar);
-      setWrongSelectedAnswers([]);
+  const handleOptionClick = (selectedOption: string) => {
+    if (selectedOption === targetChar) {
+      handleCorrectAnswer();
+      generateNewCharacter();
       setFeedback(
         <>
-          <span>{`${correctKanjiChar} = ${meaning} `}</span>
-          <CircleCheck className="inline text-[var(--main-color)]" />
+          <span>{`${correctChar} = ${selectedOption} `}</span>
+          <CircleCheck className='inline text-[var(--main-color)]' />
         </>
       );
     } else {
-      setWrongSelectedAnswers([...wrongSelectedAnswers, meaning]);
+      handleWrongAnswer(selectedOption);
       setFeedback(
         <>
-          <span>{`${correctKanjiChar} ≠ ${meaning} `}</span>
-          <CircleX className="inline text-[var(--main-color)]" />
+          <span>{`${correctChar} ≠ ${selectedOption} `}</span>
+          <CircleX className='inline text-[var(--main-color)]' />
         </>
       );
-      playErrorTwice();
-
-      incrementCharacterScore(correctKanjiChar, 'wrong');
-      incrementWrongAnswers();
-      if (score - 1 < 0) {
-        setScore(0);
-      } else {
-        setScore(score - 1);
-      }
     }
   };
+
+  const handleCorrectAnswer = () => {
+    speedStopwatch.pause();
+    addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
+    speedStopwatch.reset();
+    playCorrect();
+    addCharacterToHistory(correctChar);
+    incrementCharacterScore(correctChar, 'correct');
+    incrementCorrectAnswers();
+    setScore(score + 1);
+    setWrongSelectedAnswers([]);
+  };
+
+  const handleWrongAnswer = (selectedOption: string) => {
+    setWrongSelectedAnswers([...wrongSelectedAnswers, selectedOption]);
+    playErrorTwice();
+    incrementCharacterScore(correctChar, 'wrong');
+    incrementWrongAnswers();
+    if (score - 1 < 0) {
+      setScore(0);
+    } else {
+      setScore(score - 1);
+    }
+  };
+
+  const generateNewCharacter = () => {
+    const sourceArray = isReverse
+      ? selectedKanjiObjs.map(obj => obj.meanings[0])
+      : selectedKanjiObjs.map(obj => obj.kanjiChar);
+
+    let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    while (newChar === correctChar) {
+      newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    }
+    setCorrectChar(newChar);
+  };
+
+  const gameMode = isReverse ? 'reverse pick' : 'pick';
+  const displayCharLang = isReverse ? undefined : 'ja';
 
   return (
     <div
       className={clsx(
         'flex flex-col gap-4 sm:gap-10 items-center w-full sm:w-4/5',
         isHidden ? 'hidden' : '',
-        'max-md:pb-12'
+        !isReverse && 'max-md:pb-12'
       )}
     >
-      <GameIntel
-        feedback={feedback}
-        gameMode="pick"
-      />
+      <GameIntel feedback={feedback} gameMode={gameMode} />
 
       <p
-        className="text-9xl"
-        lang="ja"
+        className={clsx(isReverse ? 'text-6xl md:text-8xl' : 'text-9xl')}
+        lang={displayCharLang}
       >
-        {correctKanjiChar}
+        {correctChar}
       </p>
+
       <div
         className={clsx(
-          'flex w-full gap-5 sm:gap-0 sm:justify-evenly',
-          'flex-col',
-          'sm:flex-row'
+          'flex w-full gap-5 md:gap-0 sm:justify-evenly',
+          isReverse ? 'flex-row' : 'flex-col md:flex-row'
         )}
       >
-        {shuffledMeanings.map((meaning, i) => (
+        {shuffledOptions.map((option, i) => (
           <button
             ref={elem => {
               buttonRefs.current[i] = elem;
             }}
-            key={meaning + i}
-            type="button"
-            disabled={wrongSelectedAnswers.includes(meaning)}
+            key={option + i}
+            type='button'
+            disabled={wrongSelectedAnswers.includes(option)}
             className={clsx(
-              'text-4xl py-4 rounded-xl w-full sm:w-1/5 flex flex-row justify-center items-center gap-1.5',
+              'text-4xl py-4 rounded-xl w-full md:w-1/4 xl:w-1/5 flex flex-row justify-center items-center gap-1.5',
               buttonBorderStyles,
               'text-[var(--border-color)]',
-              wrongSelectedAnswers.includes(meaning) &&
+              wrongSelectedAnswers.includes(option) &&
                 'hover:bg-[var(--card-color)]',
-              !wrongSelectedAnswers.includes(meaning) &&
+              !wrongSelectedAnswers.includes(option) &&
                 'hover:scale-110 text-[var(--main-color)] hover:border-[var(--secondary-color)]'
             )}
-            onClick={() => handleOptionClick(meaning)}
+            onClick={() => handleOptionClick(option)}
+            lang={isReverse ? 'ja' : undefined}
           >
-            <span lang="ja">{meaning}</span>
+            <span>{option}</span>
             <span
               className={clsx(
                 'hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1',
@@ -208,4 +244,4 @@ const Pick = ({
   );
 };
 
-export default Pick;
+export default KanjiPickGame;

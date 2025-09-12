@@ -15,7 +15,12 @@ import Stars from '@/components/reusable/Game/Stars';
 
 const random = new Random();
 
-const Input = ({ isHidden }: { isHidden: boolean }) => {
+interface InputGameProps {
+  isHidden: boolean;
+  isReverse?: boolean;
+}
+
+const InputGame = ({ isHidden, isReverse = false }: InputGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -34,6 +39,7 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
   const { playErrorTwice } = useError();
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -42,29 +48,34 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
   const selectedKana = kanaGroupIndices.map(i => kana[i].kana).flat();
   const selectedRomaji = kanaGroupIndices.map(i => kana[i].romanji).flat();
 
+  // Create mapping pairs based on mode
   const selectedPairs = Object.fromEntries(
-    selectedKana.map((key, i) => [key, selectedRomaji[i]])
+    isReverse
+      ? selectedRomaji.map((key, i) => [key, selectedKana[i]])
+      : selectedKana.map((key, i) => [key, selectedRomaji[i]])
   );
 
-  const [correctKanaChar, setCorrectKanaChar] = useState(
-    selectedKana[random.integer(0, selectedKana.length - 1)]
+  // State for characters
+  const [correctChar, setCorrectChar] = useState(
+    isReverse
+      ? selectedRomaji[random.integer(0, selectedRomaji.length - 1)]
+      : selectedKana[random.integer(0, selectedKana.length - 1)]
   );
 
-  const correctRomajiChar = selectedPairs[correctKanaChar];
+  const targetChar = selectedPairs[correctChar];
 
   const [feedback, setFeedback] = useState(<>{'feeback ~'}</>);
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus(); // Automatically focuses on the input
+      inputRef.current.focus();
     }
   }, []);
 
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === '/') {
+      const skipKey = isReverse ? ' ' : '/';
+      if (event.key === skipKey) {
         buttonRef.current?.click();
       }
     };
@@ -74,7 +85,7 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [isReverse]);
 
   useEffect(() => {
     if (isHidden) speedStopwatch.pause();
@@ -82,63 +93,74 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (inputValue.trim().toLowerCase() === correctRomajiChar) {
-        speedStopwatch.pause();
-        addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
-        speedStopwatch.reset();
-        playCorrect();
-        addCharacterToHistory(correctKanaChar);
-        incrementCharacterScore(correctKanaChar, 'correct');
-        incrementCorrectAnswers();
-        setScore(score + 1);
-
-        setInputValue('');
-        let newRandomKana =
-          selectedKana[random.integer(0, selectedKana.length - 1)];
-        while (newRandomKana === correctKanaChar) {
-          newRandomKana =
-            selectedKana[random.integer(0, selectedKana.length - 1)];
-        }
-        setCorrectKanaChar(newRandomKana);
-        setFeedback(
-          <>
-            <span>{`${correctKanaChar} = ${correctRomajiChar} `}</span>
-            <CircleCheck className="inline text-[var(--main-color)]" />
-          </>
-        );
+      if (
+        (isReverse && inputValue.trim() === targetChar) ||
+        (!isReverse && inputValue.trim().toLowerCase() === targetChar)
+      ) {
+        handleCorrectAnswer();
       } else {
-        setInputValue('');
-        setFeedback(
-          <>
-            <span>{`${correctKanaChar} ≠ ${inputValue} `}</span>
-            <CircleX className="inline text-[var(--main-color)]" />
-          </>
-        );
-        playErrorTwice();
-
-        incrementCharacterScore(correctKanaChar, 'wrong');
-        incrementWrongAnswers();
-        if (score - 1 < 0) {
-          setScore(0);
-        } else {
-          setScore(score - 1);
-        }
+        handleWrongAnswer();
       }
     }
+  };
+
+  const handleCorrectAnswer = () => {
+    speedStopwatch.pause();
+    addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
+    speedStopwatch.reset();
+    playCorrect();
+    addCharacterToHistory(correctChar);
+    incrementCharacterScore(correctChar, 'correct');
+    incrementCorrectAnswers();
+    setScore(score + 1);
+
+    setInputValue('');
+    generateNewCharacter();
+    setFeedback(
+      <>
+        <span>{`${correctChar} = ${targetChar} `}</span>
+        <CircleCheck className="inline text-[var(--main-color)]" />
+      </>
+    );
+  };
+
+  const handleWrongAnswer = () => {
+    setInputValue('');
+    setFeedback(
+      <>
+        <span>{`${correctChar} ≠ ${inputValue} `}</span>
+        <CircleX className="inline text-[var(--main-color)]" />
+      </>
+    );
+    playErrorTwice();
+
+    incrementCharacterScore(correctChar, 'wrong');
+    incrementWrongAnswers();
+    if (score - 1 < 0) {
+      setScore(0);
+    } else {
+      setScore(score - 1);
+    }
+  };
+
+  const generateNewCharacter = () => {
+    const sourceArray = isReverse ? selectedRomaji : selectedKana;
+    let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    while (newChar === correctChar) {
+      newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    }
+    setCorrectChar(newChar);
   };
 
   const handleSkip = (e: React.MouseEvent<HTMLButtonElement>) => {
     playClick();
     e.currentTarget.blur();
     setInputValue('');
-    let newRandomKana =
-      selectedKana[random.integer(0, selectedKana.length - 1)];
-    while (newRandomKana === correctKanaChar) {
-      newRandomKana = selectedKana[random.integer(0, selectedKana.length - 1)];
-    }
-    setCorrectKanaChar(newRandomKana);
-    setFeedback(<>{`skipped ~ ${correctKanaChar} = ${correctRomajiChar}`}</>);
+    generateNewCharacter();
+    setFeedback(<>{`skipped ~ ${correctChar} = ${targetChar}`}</>);
   };
+
+  const gameMode = isReverse ? 'reverse input' : 'input';
 
   return (
     <div
@@ -149,15 +171,15 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
     >
       <GameIntel
         feedback={feedback}
-        gameMode="input"
+        gameMode={gameMode}
       />
-      <p className="text-8xl sm:text-9xl font-medium">{correctKanaChar}</p>
+      <p className="text-8xl sm:text-9xl font-medium">{correctChar}</p>
       <input
         ref={inputRef}
         type="text"
         value={inputValue}
         className={clsx(
-          'border-b-2 pb-1 text-center  focus:outline-none  text-2xl lg:text-5xl',
+          'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
           'border-[var(--card-color)] focus:border-[var(--border-color)]'
         )}
         onChange={e => setInputValue(e.target.value)}
@@ -166,7 +188,7 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
       <button
         ref={buttonRef}
         className={clsx(
-          'text-xl font-medium  py-4 px-16 ',
+          'text-xl font-medium py-4 px-16 rounded-3xl',
           'flex flex-row items-end gap-2',
           buttonBorderStyles,
           'active:scale-95 md:active:scale-98 active:duration-200',
@@ -182,4 +204,4 @@ const Input = ({ isHidden }: { isHidden: boolean }) => {
   );
 };
 
-export default Input;
+export default InputGame;

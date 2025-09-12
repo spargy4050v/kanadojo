@@ -3,8 +3,7 @@ import clsx from 'clsx';
 import { useState, useEffect, useRef } from 'react';
 import { kana } from '@/static/kana';
 import useKanaKanjiStore from '@/store/useKanaKanjiStore';
-import { CircleCheck } from 'lucide-react';
-import { CircleX } from 'lucide-react';
+import { CircleCheck, CircleX } from 'lucide-react';
 import { Random } from 'random-js';
 import { useCorrect, useError } from '@/lib/hooks/useAudio';
 import GameIntel from '@/components/reusable/Game/GameIntel';
@@ -17,7 +16,12 @@ import Stars from '@/components/reusable/Game/Stars';
 
 const random = new Random();
 
-const Pick = ({ isHidden }: { isHidden: boolean }) => {
+interface PickGameProps {
+  isHidden: boolean;
+  isReverse?: boolean;
+}
+
+const PickGame = ({ isHidden, isReverse = false }: PickGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -39,42 +43,90 @@ const Pick = ({ isHidden }: { isHidden: boolean }) => {
   const selectedKana = kanaGroupIndices.map(i => kana[i].kana).flat();
   const selectedRomaji = kanaGroupIndices.map(i => kana[i].romanji).flat();
 
+  // For normal pick mode
   const selectedPairs = Object.fromEntries(
     selectedKana.map((key, i) => [key, selectedRomaji[i]])
   );
 
+  // For reverse pick mode
+  const selectedPairs1 = Object.fromEntries(
+    selectedRomaji.map((key, i) => [key, selectedKana[i]])
+  );
+  const selectedPairs2 = Object.fromEntries(
+    selectedRomaji
+      .map((key, i) => [key, selectedKana[i]])
+      .slice()
+      .reverse()
+  );
+  const reversedPairs1 = Object.fromEntries(
+    Object.entries(selectedPairs1).map(([key, value]) => [value, key])
+  );
+  const reversedPairs2 = Object.fromEntries(
+    Object.entries(selectedPairs2).map(([key, value]) => [value, key])
+  );
+
+  // State for normal pick mode
   const [correctKanaChar, setCorrectKanaChar] = useState(
     selectedKana[random.integer(0, selectedKana.length - 1)]
   );
-
   const correctRomajiChar = selectedPairs[correctKanaChar];
 
-  const { [correctKanaChar]: _, ...incorrectPairs } = selectedPairs;
-  void _;
+  // State for reverse pick mode
+  const [correctRomajiCharReverse, setCorrectRomajiCharReverse] = useState(
+    selectedRomaji[random.integer(0, selectedRomaji.length - 1)]
+  );
+  const correctKanaCharReverse = random.bool()
+    ? selectedPairs1[correctRomajiCharReverse]
+    : selectedPairs2[correctRomajiCharReverse];
 
-  const randomIncorrectRomaji = [...Object.values(incorrectPairs)]
-    .sort(() => random.real(0, 1) - 0.5)
-    .slice(0, 2);
+  // Get incorrect options based on mode
+  const getIncorrectOptions = () => {
+    if (!isReverse) {
+      const { [correctKanaChar]: _, ...incorrectPairs } = selectedPairs;
+      void _;
+      return [...Object.values(incorrectPairs)]
+        .sort(() => random.real(0, 1) - 0.5)
+        .slice(0, 2);
+    } else {
+      const { [correctRomajiCharReverse]: _, ...incorrectPairs } = random.bool()
+        ? selectedPairs1
+        : selectedPairs2;
+      void _;
+      return [...Object.values(incorrectPairs)]
+        .sort(() => random.real(0, 1) - 0.5)
+        .slice(0, 2);
+    }
+  };
+
+  const randomIncorrectOptions = getIncorrectOptions();
 
   const [shuffledVariants, setShuffledVariants] = useState(
-    [correctRomajiChar, ...randomIncorrectRomaji].sort(
-      () => random.real(0, 1) - 0.5
-    )
+    isReverse
+      ? [correctKanaCharReverse, ...randomIncorrectOptions].sort(
+          () => random.real(0, 1) - 0.5
+        )
+      : [correctRomajiChar, ...randomIncorrectOptions].sort(
+          () => random.real(0, 1) - 0.5
+        )
   );
 
   const [feedback, setFeedback] = useState(<>{'feeback ~'}</>);
-
-  const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>(
-    []
-  );
+  const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>([]);
 
   useEffect(() => {
     setShuffledVariants(
-      [correctRomajiChar, ...randomIncorrectRomaji].sort(
-        () => random.real(0, 1) - 0.5
-      )
+      isReverse
+        ? [correctKanaCharReverse, ...getIncorrectOptions()].sort(
+            () => random.real(0, 1) - 0.5
+          )
+        : [correctRomajiChar, ...getIncorrectOptions()].sort(
+            () => random.real(0, 1) - 0.5
+          )
     );
-  }, [correctKanaChar]);
+    if (isReverse) {
+      speedStopwatch.start();
+    }
+  }, [isReverse ? correctRomajiCharReverse : correctKanaChar]);
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
@@ -97,50 +149,94 @@ const Pick = ({ isHidden }: { isHidden: boolean }) => {
     if (isHidden) speedStopwatch.pause();
   }, [isHidden]);
 
-  const handleOptionClick = (romajiChar: string) => {
-    if (romajiChar === correctRomajiChar) {
-      speedStopwatch.pause();
-      addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
-      speedStopwatch.reset();
-      playCorrect();
-      addCharacterToHistory(correctKanaChar);
-      incrementCharacterScore(correctKanaChar, 'correct');
-      incrementCorrectAnswers();
-      setScore(score + 1);
-
-      let newRandomKana =
-        selectedKana[random.integer(0, selectedKana.length - 1)];
-      while (newRandomKana === correctKanaChar) {
-        newRandomKana =
+  const handleOptionClick = (selectedChar: string) => {
+    if (!isReverse) {
+      // Normal pick mode logic
+      if (selectedChar === correctRomajiChar) {
+        handleCorrectAnswer(correctKanaChar);
+        let newRandomKana =
           selectedKana[random.integer(0, selectedKana.length - 1)];
-      }
-      setCorrectKanaChar(newRandomKana);
-      setWrongSelectedAnswers([]);
-      setFeedback(
-        <>
-          <span>{`${correctKanaChar} = ${correctRomajiChar} `}</span>
-          <CircleCheck className="inline text-[var(--main-color)]" />
-        </>
-      );
-    } else {
-      setWrongSelectedAnswers([...wrongSelectedAnswers, romajiChar]);
-      setFeedback(
-        <>
-          <span>{`${correctKanaChar} ≠ ${romajiChar} `}</span>
-          <CircleX className="inline text-[var(--main-color)]" />
-        </>
-      );
-      playErrorTwice();
-
-      incrementCharacterScore(correctKanaChar, 'wrong');
-      incrementWrongAnswers();
-      if (score - 1 < 0) {
-        setScore(0);
+        while (newRandomKana === correctKanaChar) {
+          newRandomKana =
+            selectedKana[random.integer(0, selectedKana.length - 1)];
+        }
+        setCorrectKanaChar(newRandomKana);
+        setFeedback(
+          <>
+            <span>{`${correctKanaChar} = ${correctRomajiChar} `}</span>
+            <CircleCheck className="inline text-[var(--main-color)]" />
+          </>
+        );
       } else {
-        setScore(score - 1);
+        handleWrongAnswer(selectedChar);
+        setFeedback(
+          <>
+            <span>{`${correctKanaChar} ≠ ${selectedChar} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
+          </>
+        );
+      }
+    } else {
+      // Reverse pick mode logic
+      if (
+        reversedPairs1[selectedChar] === correctRomajiCharReverse ||
+        reversedPairs2[selectedChar] === correctRomajiCharReverse
+      ) {
+        handleCorrectAnswer(correctRomajiCharReverse);
+        let newRandomRomaji =
+          selectedRomaji[random.integer(0, selectedRomaji.length - 1)];
+        while (newRandomRomaji === correctRomajiCharReverse) {
+          newRandomRomaji =
+            selectedRomaji[random.integer(0, selectedRomaji.length - 1)];
+        }
+        setCorrectRomajiCharReverse(newRandomRomaji);
+        setFeedback(
+          <>
+            <span>{`${correctRomajiCharReverse} = ${correctKanaCharReverse} `}</span>
+            <CircleCheck className="inline text-[var(--main-color)]" />
+          </>
+        );
+      } else {
+        handleWrongAnswer(selectedChar);
+        setFeedback(
+          <>
+            <span>{`${correctRomajiCharReverse} ≠ ${selectedChar} `}</span>
+            <CircleX className="inline text-[var(--main-color)]" />
+          </>
+        );
       }
     }
   };
+
+  const handleCorrectAnswer = (correctChar: string) => {
+    speedStopwatch.pause();
+    addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
+    speedStopwatch.reset();
+    playCorrect();
+    addCharacterToHistory(correctChar);
+    incrementCharacterScore(correctChar, 'correct');
+    incrementCorrectAnswers();
+    setScore(score + 1);
+    setWrongSelectedAnswers([]);
+  };
+
+  const handleWrongAnswer = (selectedChar: string) => {
+    setWrongSelectedAnswers([...wrongSelectedAnswers, selectedChar]);
+    playErrorTwice();
+    incrementCharacterScore(
+      isReverse ? correctRomajiCharReverse : correctKanaChar,
+      'wrong'
+    );
+    incrementWrongAnswers();
+    if (score - 1 < 0) {
+      setScore(0);
+    } else {
+      setScore(score - 1);
+    }
+  };
+
+  const displayChar = isReverse ? correctRomajiCharReverse : correctKanaChar;
+  const gameMode = isReverse ? 'reverse pick' : 'pick';
 
   return (
     <div
@@ -151,29 +247,29 @@ const Pick = ({ isHidden }: { isHidden: boolean }) => {
     >
       <GameIntel
         feedback={feedback}
-        gameMode="pick"
+        gameMode={gameMode}
       />
-      <p className="text-8xl sm:text-9xl font-medium">{correctKanaChar}</p>
+      <p className="text-8xl sm:text-9xl font-medium">{displayChar}</p>
       <div className="flex flex-row w-full gap-5 sm:gap-0 sm:justify-evenly">
-        {shuffledVariants.map((romajiChar, i) => (
+        {shuffledVariants.map((variantChar, i) => (
           <button
             ref={elem => {
               buttonRefs.current[i] = elem;
             }}
-            key={romajiChar + i}
+            key={variantChar + i}
             type="button"
-            disabled={wrongSelectedAnswers.includes(romajiChar)}
+            disabled={wrongSelectedAnswers.includes(variantChar)}
             className={clsx(
-              'text-5xl font-semibold pb-6 pt-3  w-full sm:w-1/5 flex flex-row justify-center items-center gap-1',
+              'text-5xl font-semibold pb-6 pt-3 w-full sm:w-1/5 flex flex-row justify-center items-center gap-1',
               buttonBorderStyles,
-              wrongSelectedAnswers.includes(romajiChar) &&
+              wrongSelectedAnswers.includes(variantChar) &&
                 'hover:bg-[var(--card-color)] hover:border-[var(--border-color)] text-[var(--border-color)]',
-              !wrongSelectedAnswers.includes(romajiChar) &&
+              !wrongSelectedAnswers.includes(variantChar) &&
                 'hover:scale-110 text-[var(--main-color)] hover:border-[var(--main-color)]'
             )}
-            onClick={() => handleOptionClick(romajiChar)}
+            onClick={() => handleOptionClick(variantChar)}
           >
-            <span>{romajiChar}</span>
+            <span>{variantChar}</span>
             <span className="hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1">
               {i + 1 === 1 ? '1' : i + 1 === 2 ? '2' : '3'}
             </span>
@@ -185,4 +281,4 @@ const Pick = ({ isHidden }: { isHidden: boolean }) => {
   );
 };
 
-export default Pick;
+export default PickGame;

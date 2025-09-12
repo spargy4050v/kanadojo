@@ -14,13 +14,13 @@ import Stars from '@/components/reusable/Game/Stars';
 
 const random = new Random();
 
-const Input = ({
-  selectedWordObjs,
-  isHidden,
-}: {
+interface VocabInputGameProps {
   selectedWordObjs: IWordObj[];
   isHidden: boolean;
-}) => {
+  isReverse?: boolean;
+}
+
+const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: VocabInputGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -38,108 +38,141 @@ const Input = ({
   const { playCorrect } = useCorrect();
   const { playErrorTwice } = useError();
 
-  const [inputValue, setInputValue] = useState('');
-
   const inputRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [correctWord, setCorrectWord] = useState(
-    selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word
+  const [inputValue, setInputValue] = useState('');
+
+  // State management based on mode
+  const [correctChar, setCorrectChar] = useState(
+    isReverse
+      ? selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].meanings[0]
+      : selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word
   );
 
-  const correctMeanings = selectedWordObjs.find(
-    wordObj => wordObj.word === correctWord
-  )?.meanings as string[];
+  // Find the target character/meaning based on mode
+  const correctObj = isReverse
+    ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
+    : selectedWordObjs.find(obj => obj.word === correctChar);
+
+  const targetChar = isReverse
+    ? correctObj?.word
+    : correctObj?.meanings;
 
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus(); // Automatically focuses on the input
+      inputRef.current.focus();
     }
   }, []);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event: KeyboardEvent) => {
-  //     if (event.ctrlKey && event.code === 'Space') {
-  //       buttonRef.current?.click();
-  //     }
-  //   };
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.code === 'Space') {
+        buttonRef.current?.click();
+      }
+    };
 
-  //   window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
-  //   return () => {
-  //     window.removeEventListener('keydown', handleKeyDown);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     if (isHidden) speedStopwatch.pause();
   }, [isHidden]);
 
-  const handleEnter = (e: React.KeyboardEvent) => {
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (correctMeanings.includes(inputValue.trim().toLowerCase())) {
-        speedStopwatch.pause();
-        addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
-        speedStopwatch.reset();
-        playCorrect();
-        addCharacterToHistory(correctWord);
-        incrementCharacterScore(correctWord, 'correct');
-        incrementCorrectAnswers();
-        setScore(score + 1);
-
-        setInputValue('');
-        let newRandomWord =
-          selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word;
-        while (newRandomWord === correctWord) {
-          newRandomWord =
-            selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)]
-              .word;
-        }
-        setCorrectWord(newRandomWord);
-        setFeedback(
-          <>
-            <span>
-              {`${correctWord} = ${inputValue.trim().toLowerCase()} `}
-            </span>
-            <CircleCheck className="inline text-[var(--main-color)]" />
-          </>
-        );
+      if (isInputCorrect(inputValue.trim())) {
+        handleCorrectAnswer(inputValue.trim());
       } else {
-        setInputValue('');
-        setFeedback(
-          <>
-            <span>{`${correctWord} ≠ ${inputValue} `}</span>
-            <CircleX className="inline text-[var(--main-color)]" />
-          </>
-        );
-        playErrorTwice();
-
-        incrementCharacterScore(correctWord, 'wrong');
-        incrementWrongAnswers();
-        if (score - 1 < 0) {
-          setScore(0);
-        } else {
-          setScore(score - 1);
-        }
+        handleWrongAnswer();
       }
     }
+  };
+
+  const isInputCorrect = (input: string): boolean => {
+    if (!isReverse) {
+      // Normal mode: input should match any of the meanings (case insensitive)
+      return Array.isArray(targetChar) && targetChar.includes(input.toLowerCase());
+    } else {
+      // Reverse mode: input should match the exact word
+      return input === targetChar;
+    }
+  };
+
+  const handleCorrectAnswer = (userInput: string) => {
+    speedStopwatch.pause();
+    addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
+    speedStopwatch.reset();
+    playCorrect();
+    addCharacterToHistory(correctChar);
+    incrementCharacterScore(correctChar, 'correct');
+    incrementCorrectAnswers();
+    setScore(score + 1);
+
+    setInputValue('');
+    generateNewCharacter();
+    setFeedback(
+      <>
+        <span>{`${correctChar} = ${userInput} `}</span>
+        <CircleCheck className="inline text-[var(--main-color)]" />
+      </>
+    );
+  };
+
+  const handleWrongAnswer = () => {
+    setInputValue('');
+    setFeedback(
+      <>
+        <span>{`${correctChar} ≠ ${inputValue} `}</span>
+        <CircleX className="inline text-[var(--main-color)]" />
+      </>
+    );
+    playErrorTwice();
+
+    incrementCharacterScore(correctChar, 'wrong');
+    incrementWrongAnswers();
+    if (score - 1 < 0) {
+      setScore(0);
+    } else {
+      setScore(score - 1);
+    }
+  };
+
+  const generateNewCharacter = () => {
+    const sourceArray = isReverse
+      ? selectedWordObjs.map(obj => obj.meanings[0])
+      : selectedWordObjs.map(obj => obj.word);
+    
+    let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    while (newChar === correctChar) {
+      newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    }
+    setCorrectChar(newChar);
   };
 
   const handleSkip = (e: React.MouseEvent<HTMLButtonElement>) => {
     playClick();
     e.currentTarget.blur();
     setInputValue('');
-    let newRandomWord =
-      selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word;
-    while (newRandomWord === correctWord) {
-      newRandomWord =
-        selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word;
-    }
-    setCorrectWord(newRandomWord);
-    setFeedback(<>{`skipped ~ ${correctWord} = ${correctMeanings[0]}`}</>);
+    generateNewCharacter();
+    
+    const displayTarget = isReverse 
+      ? targetChar 
+      : Array.isArray(targetChar) ? targetChar[0] : targetChar;
+    
+    setFeedback(<>{`skipped ~ ${correctChar} = ${displayTarget}`}</>);
   };
+
+  const gameMode = isReverse ? 'reverse input' : 'input';
+  const displayCharLang = isReverse ? 'en' : 'ja';
+  const inputLang = isReverse ? 'ja' : 'en';
+  const textSize = isReverse ? 'text-5xl sm:text-7xl' : 'text-5xl md:text-8xl';
 
   return (
     <div
@@ -150,30 +183,33 @@ const Input = ({
     >
       <GameIntel
         feedback={feedback}
-        gameMode="input"
+        gameMode={gameMode}
       />
+      
       <p
-        className="text-5xl md:text-9xl text-center"
-        lang="ja"
+        className={clsx(textSize, 'text-center')}
+        lang={displayCharLang}
       >
-        {correctWord}
+        {correctChar}
       </p>
+      
       <input
-        lang="en"
         ref={inputRef}
         type="text"
         value={inputValue}
         className={clsx(
-          'border-b-2 pb-1 text-center  focus:outline-none  text-2xl lg:text-5xl',
+          'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
           'border-[var(--card-color)] focus:border-[var(--border-color)]'
         )}
         onChange={e => setInputValue(e.target.value)}
         onKeyDown={handleEnter}
+        lang={inputLang}
       />
+      
       <button
         ref={buttonRef}
         className={clsx(
-          'text-xl font-medium py-4 px-16 ',
+          'text-xl font-medium py-4 px-16',
           buttonBorderStyles,
           'flex flex-row items-end gap-2',
           'active:scale-95 md:active:scale-98 active:duration-225',
@@ -190,4 +226,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default VocabInputGame;

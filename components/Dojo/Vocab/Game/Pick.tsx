@@ -1,8 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { useState, useEffect, useRef } from 'react';
-import { CircleCheck } from 'lucide-react';
-import { CircleX } from 'lucide-react';
+import { CircleCheck, CircleX } from 'lucide-react';
 import { Random } from 'random-js';
 import { IWordObj } from '@/store/useVocabStore';
 import { useCorrect, useError } from '@/lib/hooks/useAudio';
@@ -16,13 +15,17 @@ import Stars from '@/components/reusable/Game/Stars';
 
 const random = new Random();
 
-const Pick = ({
-  selectedWordObjs,
-  isHidden,
-}: {
+interface VocabPickGameProps {
   selectedWordObjs: IWordObj[];
   isHidden: boolean;
-}) => {
+  isReverse?: boolean;
+}
+
+const VocabPickGame = ({
+  selectedWordObjs,
+  isHidden,
+  isReverse = false
+}: VocabPickGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -33,55 +36,77 @@ const Pick = ({
     incrementWrongAnswers,
     addCharacterToHistory,
     addCorrectAnswerTime,
-    incrementCharacterScore,
+    incrementCharacterScore
   } = useStats();
 
   const { playCorrect } = useCorrect();
   const { playErrorTwice } = useError();
 
-  const [correctWord, setCorrectWord] = useState(
-    selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word
+  // State management based on mode
+  const [correctChar, setCorrectChar] = useState(
+    isReverse
+      ? selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)]
+          .meanings[0]
+      : selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word
   );
 
-  const correctMeaning = selectedWordObjs.find(
-    wordObj => wordObj.word === correctWord
-  )?.meanings[0];
+  // Find the correct object based on the current mode
+  const correctWordObj = isReverse
+    ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
+    : selectedWordObjs.find(obj => obj.word === correctChar);
 
-  const incorrectWordObjs = selectedWordObjs.filter(
-    currentWordObj => currentWordObj.word !== correctWord
-  );
+  const targetChar = isReverse
+    ? correctWordObj?.word
+    : correctWordObj?.meanings[0];
 
-  const randomIncorrectMeanings = incorrectWordObjs
-    .map(currentIncorrectWordObj => currentIncorrectWordObj.meanings[0])
-    .sort(() => random.real(0, 1) - 0.5)
-    .slice(0, 2);
+  // Get incorrect options based on mode
+  const getIncorrectOptions = () => {
+    if (!isReverse) {
+      const incorrectWordObjs = selectedWordObjs.filter(
+        currentWordObj => currentWordObj.word !== correctChar
+      );
+      return incorrectWordObjs
+        .map(obj => obj.meanings[0])
+        .sort(() => random.real(0, 1) - 0.5)
+        .slice(0, 2);
+    } else {
+      const incorrectWordObjs = selectedWordObjs.filter(
+        currentWordObj => currentWordObj.meanings[0] !== correctChar
+      );
+      return incorrectWordObjs
+        .map(obj => obj.word)
+        .sort(() => random.real(0, 1) - 0.5)
+        .slice(0, 2);
+    }
+  };
 
-  const [shuffledMeanings, setShuffledMeanings] = useState(
-    [correctMeaning, ...randomIncorrectMeanings].sort(
+  const randomIncorrectOptions = getIncorrectOptions();
+
+  const [shuffledOptions, setShuffledOptions] = useState(
+    [targetChar, ...randomIncorrectOptions].sort(
       () => random.real(0, 1) - 0.5
     ) as string[]
   );
 
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
-
   const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>(
     []
   );
 
   useEffect(() => {
-    setShuffledMeanings(
-      [correctMeaning, ...randomIncorrectMeanings].sort(
+    setShuffledOptions(
+      [targetChar, ...getIncorrectOptions()].sort(
         () => random.real(0, 1) - 0.5
       ) as string[]
     );
-  }, [correctWord]);
+  }, [correctChar]);
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const index = pickGameKeyMappings[event.code];
-      if (index !== undefined && index < shuffledMeanings.length) {
+      if (index !== undefined && index < shuffledOptions.length) {
         buttonRefs.current[index]?.click();
       }
     };
@@ -97,51 +122,67 @@ const Pick = ({
     if (isHidden) speedStopwatch.pause();
   }, [isHidden]);
 
-  const handleOptionClick = (meaning: string) => {
-    if (meaning === correctMeaning) {
-      speedStopwatch.pause();
-      addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
-      speedStopwatch.reset();
-      playCorrect();
-      addCharacterToHistory(correctWord);
-      incrementCharacterScore(correctWord, 'correct');
-      incrementCorrectAnswers();
-      setScore(score + 1);
-
-      let newRandomWord =
-        selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word;
-
-      while (newRandomWord === correctWord) {
-        newRandomWord =
-          selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word;
-      }
-      setCorrectWord(newRandomWord);
-      setWrongSelectedAnswers([]);
+  const handleOptionClick = (selectedOption: string) => {
+    if (selectedOption === targetChar) {
+      handleCorrectAnswer();
+      generateNewCharacter();
       setFeedback(
         <>
-          <span>{`${correctWord} = ${meaning} `}</span>
-          <CircleCheck className="inline text-[var(--main-color)]" />
+          <span>{`${correctChar} = ${selectedOption} `}</span>
+          <CircleCheck className='inline text-[var(--main-color)]' />
         </>
       );
     } else {
-      setWrongSelectedAnswers([...wrongSelectedAnswers, meaning]);
+      handleWrongAnswer(selectedOption);
       setFeedback(
         <>
-          <span>{`${correctWord} ≠ ${meaning} `}</span>
-          <CircleX className="inline text-[var(--main-color)]" />
+          <span>{`${correctChar} ≠ ${selectedOption} `}</span>
+          <CircleX className='inline text-[var(--main-color)]' />
         </>
       );
-      playErrorTwice();
-
-      incrementCharacterScore(correctWord, 'wrong');
-      incrementWrongAnswers();
-      if (score - 1 < 0) {
-        setScore(0);
-      } else {
-        setScore(score - 1);
-      }
     }
   };
+
+  const handleCorrectAnswer = () => {
+    speedStopwatch.pause();
+    addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
+    speedStopwatch.reset();
+    playCorrect();
+    addCharacterToHistory(correctChar);
+    incrementCharacterScore(correctChar, 'correct');
+    incrementCorrectAnswers();
+    setScore(score + 1);
+    setWrongSelectedAnswers([]);
+  };
+
+  const handleWrongAnswer = (selectedOption: string) => {
+    setWrongSelectedAnswers([...wrongSelectedAnswers, selectedOption]);
+    playErrorTwice();
+    incrementCharacterScore(correctChar, 'wrong');
+    incrementWrongAnswers();
+    if (score - 1 < 0) {
+      setScore(0);
+    } else {
+      setScore(score - 1);
+    }
+  };
+
+  const generateNewCharacter = () => {
+    const sourceArray = isReverse
+      ? selectedWordObjs.map(obj => obj.meanings[0])
+      : selectedWordObjs.map(obj => obj.word);
+
+    let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    while (newChar === correctChar) {
+      newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
+    }
+    setCorrectChar(newChar);
+  };
+
+  const gameMode = isReverse ? 'reverse pick' : 'pick';
+  const displayCharLang = isReverse ? undefined : 'ja';
+  const optionLang = isReverse ? 'ja' : undefined;
+  const textSize = isReverse ? 'text-4xl md:text-7xl' : 'text-6xl md:text-9xl';
 
   return (
     <div
@@ -151,43 +192,41 @@ const Pick = ({
         'max-md:mb-8'
       )}
     >
-      <GameIntel
-        feedback={feedback}
-        gameMode="pick"
-      />
-      <p
-        className="text-6xl md:text-9xl text-center"
-        lang="ja"
-      >
-        {correctWord}
+      <GameIntel feedback={feedback} gameMode={gameMode} />
+
+      <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
+        {correctChar}
       </p>
+
       <div
         className={clsx(
-          'flex flex-col w-full gap-6 md:gap-0 md:justify-evenly',
-          'md:flex-row'
+          'flex flex-col w-full gap-6 lg:gap-0 lg:justify-evenly',
+          'lg:flex-row'
         )}
       >
-        {shuffledMeanings.map((meaning, i) => (
+        {shuffledOptions.map((option, i) => (
           <button
             ref={elem => {
               buttonRefs.current[i] = elem;
             }}
-            key={meaning + i}
-            type="button"
-            disabled={wrongSelectedAnswers.includes(meaning)}
+            key={option + i}
+            type='button'
+            disabled={wrongSelectedAnswers.includes(option)}
             className={clsx(
-              'text-3xl py-4 px-2 rounded-xl w-full md:w-1/4 flex flex-row justify-center items-center gap-1.5',
+              'py-4 px-2 rounded-xl w-full lg:w-1/4 flex flex-row justify-center items-center gap-1.5',
               buttonBorderStyles,
               'active:scale-95 md:active:scale-98 active:duration-200',
               'text-[var(--border-color)]',
-              wrongSelectedAnswers.includes(meaning) &&
+              isReverse ? 'text-4xl' : 'text-3xl',
+              wrongSelectedAnswers.includes(option) &&
                 'hover:bg-[var(--card-color)]',
-              !wrongSelectedAnswers.includes(meaning) &&
+              !wrongSelectedAnswers.includes(option) &&
                 'hover:scale-110 text-[var(--main-color)] hover:text-[var(--secondary-color)]'
             )}
-            onClick={() => handleOptionClick(meaning)}
+            onClick={() => handleOptionClick(option)}
+            lang={optionLang}
           >
-            <span lang="ja">{meaning}</span>
+            <span>{option}</span>
             <span
               className={clsx(
                 'hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1',
@@ -205,4 +244,4 @@ const Pick = ({
   );
 };
 
-export default Pick;
+export default VocabPickGame;

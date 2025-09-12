@@ -2,9 +2,8 @@
 import { useEffect } from 'react';
 import Return from '@/components/reusable/Game/ReturnFromGame';
 import Pick from './Pick';
-import ReversePick from './ReversePick';
 import Input from './Input';
-import ReverseInput from './ReverseInput';
+
 import useVocabStore from '@/store/useVocabStore';
 import useStatsStore from '@/store/useStatsStore';
 import Stats from '@/components/reusable/Game/Stats';
@@ -25,31 +24,24 @@ const Game = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 md:gap-10 items-center min-h-[100dvh] max-w-[100dvw] px-4">
+    <div className='flex flex-col gap-6 md:gap-10 items-center min-h-[100dvh] max-w-[100dvw] px-4'>
       {showStats && <Stats />}
-      <Return
-        isHidden={showStats}
-        href={pathname}
-      />
+      <Return isHidden={showStats} href={pathname} />
       {gameMode.toLowerCase() === 'pick' ? (
+        <Pick selectedWordObjs={selectedWordObjs} isHidden={showStats} />
+      ) : gameMode.toLowerCase() === 'reverse-pick' ? (
         <Pick
           selectedWordObjs={selectedWordObjs}
           isHidden={showStats}
-        />
-      ) : gameMode.toLowerCase() === 'reverse-pick' ? (
-        <ReversePick
-          selectedWordObjs={selectedWordObjs}
-          isHidden={showStats}
+          isReverse={true}
         />
       ) : gameMode.toLowerCase() === 'input' ? (
+        <Input selectedWordObjs={selectedWordObjs} isHidden={showStats} />
+      ) : gameMode.toLowerCase() === 'reverse-input' ? (
         <Input
           selectedWordObjs={selectedWordObjs}
           isHidden={showStats}
-        />
-      ) : gameMode.toLowerCase() === 'reverse-input' ? (
-        <ReverseInput
-          selectedWordObjs={selectedWordObjs}
-          isHidden={showStats}
+          isReverse={true}
         />
       ) : null}
     </div>

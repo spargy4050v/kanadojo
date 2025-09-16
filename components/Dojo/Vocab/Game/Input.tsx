@@ -182,7 +182,6 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
       )}
     >
       <GameIntel
-        feedback={feedback}
         gameMode={gameMode}
       />
       

@@ -203,7 +203,7 @@ const KanjiInputGame = ({
         isHidden ? 'hidden' : ''
       )}
     >
-      <GameIntel feedback={feedback} gameMode={gameMode} />
+      <GameIntel  gameMode={gameMode} />
       {displayAnswerSummary && (
         <AnswerSummary
           payload={currentKanjiObj}

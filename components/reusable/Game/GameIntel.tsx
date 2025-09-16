@@ -13,10 +13,8 @@ import useVocabStore from '@/store/useVocabStore';
 import { usePathname } from 'next/navigation';
 
 const GameIntel = ({
-  feedback,
   gameMode
 }: {
-  feedback: React.ReactElement;
   gameMode: string;
 }) => {
   const numCorrectAnswers = useStatsStore(state => state.numCorrectAnswers);

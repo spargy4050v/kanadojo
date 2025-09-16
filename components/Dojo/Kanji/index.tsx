@@ -183,7 +183,6 @@ const KanjiCards = () => {
                         <Circle className='mt-0.5 text-[var(--border-color)] ' />
                       )}
                       {kanjiSetTemp.name}
-                      {/* <MousePointer2 className='mt-0.5 text-[var(--secondary-color)] ' /> */}
                     </button>
                     <KanjiSetDictionary set={kanjiSetTemp.id} />
                   </div>

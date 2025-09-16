@@ -199,7 +199,7 @@ const VocabPickGame = ({
         'max-md:mb-8'
       )}
     >
-      <GameIntel feedback={feedback} gameMode={gameMode} />
+      <GameIntel gameMode={gameMode} />
       {displayAnswerSummary && (
         <AnswerSummary
           payload={currentWordObj}

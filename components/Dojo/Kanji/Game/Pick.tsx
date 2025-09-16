@@ -200,7 +200,7 @@ const KanjiPickGame = ({
         !isReverse && 'max-md:pb-12'
       )}
     >
-      <GameIntel feedback={feedback} gameMode={gameMode} />
+      <GameIntel  gameMode={gameMode} />
       {displayAnswerSummary && (
         <AnswerSummary
           payload={currentKanjiObj}

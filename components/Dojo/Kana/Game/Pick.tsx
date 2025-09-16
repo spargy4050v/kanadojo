@@ -246,7 +246,6 @@ const PickGame = ({ isHidden, isReverse = false }: PickGameProps) => {
       )}
     >
       <GameIntel
-        feedback={feedback}
         gameMode={gameMode}
       />
       <p className="text-8xl sm:text-9xl font-medium">{displayChar}</p>

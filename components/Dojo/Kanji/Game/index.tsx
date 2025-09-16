@@ -23,7 +23,7 @@ const Game = () => {
   }, []);
 
   return (
-    <div className='flex flex-col gap-6 md:gap-10 items-center min-h-[100dvh] max-w-[100dvw] px-4 '>
+    <div className='flex flex-col gap-4 md:gap-6 items-center min-h-[100dvh] max-w-[100dvw] px-4 '>
       {showStats && <Stats />}
       <Return isHidden={showStats} href={pathname} />
       {gameMode.toLowerCase() === 'pick' ? (

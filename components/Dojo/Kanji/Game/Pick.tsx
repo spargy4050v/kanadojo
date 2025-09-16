@@ -12,6 +12,7 @@ import { useStopwatch } from 'react-timer-hook';
 import useStats from '@/lib/hooks/useStats';
 import useStatsStore from '@/store/useStatsStore';
 import Stars from '@/components/reusable/Game/Stars';
+import AnswerSummary from '@/components/reusable/Game/AnswerSummary';
 
 const random = new Random();
 
@@ -52,9 +53,13 @@ const KanjiPickGame = ({
   );
 
   // Find the correct object based on the current mode
-  const correctKanjiObj = isReverse
-    ? selectedKanjiObjs.find(obj => obj.meanings[0] === correctChar)
-    : selectedKanjiObjs.find(obj => obj.kanjiChar === correctChar);
+  const correctKanjiObj = (
+    isReverse
+      ? selectedKanjiObjs.find(obj => obj.meanings[0] === correctChar)
+      : selectedKanjiObjs.find(obj => obj.kanjiChar === correctChar)
+  )!;
+
+  const [currentKanjiObj, setCurrentKanjiObj] = useState(correctKanjiObj);
 
   const targetChar = isReverse
     ? correctKanjiObj?.kanjiChar
@@ -89,6 +94,7 @@ const KanjiPickGame = ({
     ) as string[]
   );
 
+  const [displayAnswerSummary, setDisplayAnswerSummary] = useState(false);
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
   const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>(
     []
@@ -125,6 +131,7 @@ const KanjiPickGame = ({
 
   const handleOptionClick = (selectedOption: string) => {
     if (selectedOption === targetChar) {
+      setDisplayAnswerSummary(true);
       handleCorrectAnswer();
       generateNewCharacter();
       setFeedback(
@@ -149,6 +156,8 @@ const KanjiPickGame = ({
     addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
     speedStopwatch.reset();
     playCorrect();
+    setCurrentKanjiObj(correctKanjiObj);
+
     addCharacterToHistory(correctChar);
     incrementCharacterScore(correctChar, 'correct');
     incrementCorrectAnswers();
@@ -186,60 +195,71 @@ const KanjiPickGame = ({
   return (
     <div
       className={clsx(
-        'flex flex-col gap-4 sm:gap-10 items-center w-full sm:w-4/5',
+        'flex flex-col gap-4 sm:gap-8 items-center w-full sm:w-4/5',
         isHidden ? 'hidden' : '',
         !isReverse && 'max-md:pb-12'
       )}
     >
       <GameIntel feedback={feedback} gameMode={gameMode} />
+      {displayAnswerSummary && (
+        <AnswerSummary
+          payload={currentKanjiObj}
+          setDisplayAnswerSummary={setDisplayAnswerSummary}
+          feedback={feedback}
+        />
+      )}
 
-      <p
-        className={clsx(isReverse ? 'text-6xl md:text-8xl' : 'text-9xl')}
-        lang={displayCharLang}
-      >
-        {correctChar}
-      </p>
-
-      <div
-        className={clsx(
-          'flex w-full gap-5 md:gap-0 sm:justify-evenly',
-          isReverse ? 'flex-row' : 'flex-col md:flex-row'
-        )}
-      >
-        {shuffledOptions.map((option, i) => (
-          <button
-            ref={elem => {
-              buttonRefs.current[i] = elem;
-            }}
-            key={option + i}
-            type='button'
-            disabled={wrongSelectedAnswers.includes(option)}
-            className={clsx(
-              'text-4xl py-4 rounded-xl w-full md:w-1/4 xl:w-1/5 flex flex-row justify-center items-center gap-1.5',
-              buttonBorderStyles,
-              'text-[var(--border-color)]',
-              wrongSelectedAnswers.includes(option) &&
-                'hover:bg-[var(--card-color)]',
-              !wrongSelectedAnswers.includes(option) &&
-                'hover:scale-110 text-[var(--main-color)] hover:border-[var(--secondary-color)]'
-            )}
-            onClick={() => handleOptionClick(option)}
-            lang={isReverse ? 'ja' : undefined}
+      {!displayAnswerSummary && (
+        <>
+          <p
+            className={clsx(isReverse ? 'text-6xl md:text-8xl' : 'text-9xl')}
+            lang={displayCharLang}
           >
-            <span>{option}</span>
-            <span
-              className={clsx(
-                'hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1',
-                'text-[var(--secondary-color)]'
-              )}
-            >
-              {i + 1 === 1 ? '1' : i + 1 === 2 ? '2' : '3'}
-            </span>
-          </button>
-        ))}
-      </div>
+            {correctChar}
+          </p>
 
-      <Stars />
+          <div
+            className={clsx(
+              'flex w-full gap-5 md:gap-0 sm:justify-evenly',
+              isReverse ? 'flex-row' : 'flex-col md:flex-row'
+            )}
+          >
+            {shuffledOptions.map((option, i) => (
+              <button
+                ref={elem => {
+                  buttonRefs.current[i] = elem;
+                }}
+                key={option + i}
+                type='button'
+                disabled={wrongSelectedAnswers.includes(option)}
+                className={clsx(
+                  'text-4xl py-4 rounded-xl w-full md:w-1/4 xl:w-1/5 flex flex-row justify-center items-center gap-1.5',
+                  buttonBorderStyles,
+                  'text-[var(--border-color)]',
+                  wrongSelectedAnswers.includes(option) &&
+                    'hover:bg-[var(--card-color)]',
+                  !wrongSelectedAnswers.includes(option) &&
+                    'hover:scale-110 text-[var(--main-color)] hover:border-[var(--secondary-color)]'
+                )}
+                onClick={() => handleOptionClick(option)}
+                lang={isReverse ? 'ja' : undefined}
+              >
+                <span>{option}</span>
+                <span
+                  className={clsx(
+                    'hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1',
+                    'text-[var(--secondary-color)]'
+                  )}
+                >
+                  {i + 1 === 1 ? '1' : i + 1 === 2 ? '2' : '3'}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <Stars />
+        </>
+      )}
     </div>
   );
 };

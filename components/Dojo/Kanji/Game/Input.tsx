@@ -11,6 +11,7 @@ import { useStopwatch } from 'react-timer-hook';
 import useStats from '@/lib/hooks/useStats';
 import useStatsStore from '@/store/useStatsStore';
 import Stars from '@/components/reusable/Game/Stars';
+import AnswerSummary from '@/components/reusable/Game/AnswerSummary';
 
 const random = new Random();
 
@@ -20,7 +21,11 @@ interface KanjiInputGameProps {
   isReverse?: boolean;
 }
 
-const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: KanjiInputGameProps) => {
+const KanjiInputGame = ({
+  selectedKanjiObjs,
+  isHidden,
+  isReverse = false
+}: KanjiInputGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -31,7 +36,7 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
     incrementWrongAnswers,
     addCharacterToHistory,
     addCorrectAnswerTime,
-    incrementCharacterScore,
+    incrementCharacterScore
   } = useStats();
 
   const { playClick } = useClick();
@@ -46,19 +51,26 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
   // State management based on mode
   const [correctChar, setCorrectChar] = useState(
     isReverse
-      ? selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)].meanings[0]
-      : selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)].kanjiChar
+      ? selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
+          .meanings[0]
+      : selectedKanjiObjs[random.integer(0, selectedKanjiObjs.length - 1)]
+          .kanjiChar
   );
 
   // Find the target character/meaning based on mode
-  const correctObj = isReverse
-    ? selectedKanjiObjs.find(obj => obj.meanings[0] === correctChar)
-    : selectedKanjiObjs.find(obj => obj.kanjiChar === correctChar);
+  const correctKanjiObj = (
+    isReverse
+      ? selectedKanjiObjs.find(obj => obj.meanings[0] === correctChar)
+      : selectedKanjiObjs.find(obj => obj.kanjiChar === correctChar)
+  )!;
+
+  const [currentKanjiObj, setCurrentKanjiObj] = useState(correctKanjiObj);
 
   const targetChar = isReverse
-    ? correctObj?.kanjiChar
-    : correctObj?.meanings;
+    ? correctKanjiObj?.kanjiChar
+    : correctKanjiObj?.meanings;
 
+  const [displayAnswerSummary, setDisplayAnswerSummary] = useState(false);
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
 
   useEffect(() => {
@@ -88,6 +100,8 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (isInputCorrect(inputValue.trim())) {
+        console.log('Correct');
+        setDisplayAnswerSummary(true);
         handleCorrectAnswer(inputValue.trim());
       } else {
         handleWrongAnswer();
@@ -98,7 +112,9 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
   const isInputCorrect = (input: string): boolean => {
     if (!isReverse) {
       // Normal mode: input should match any of the meanings (case insensitive)
-      return Array.isArray(targetChar) && targetChar.includes(input.toLowerCase());
+      return (
+        Array.isArray(targetChar) && targetChar.includes(input.toLowerCase())
+      );
     } else {
       // Reverse mode: input should match the exact kanji character
       return input === targetChar;
@@ -109,6 +125,8 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
     speedStopwatch.pause();
     addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
     speedStopwatch.reset();
+    setCurrentKanjiObj(correctKanjiObj);
+
     playCorrect();
     addCharacterToHistory(correctChar);
     incrementCharacterScore(correctChar, 'correct');
@@ -119,8 +137,8 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
     generateNewCharacter();
     setFeedback(
       <>
-        <span>{`${correctChar} = ${userInput} `}</span>
-        <CircleCheck className="inline text-[var(--main-color)]" />
+        <span>{`${correctChar} = ${userInput.trim().toLowerCase()} `}</span>
+        <CircleCheck className='inline text-[var(--main-color)]' />
       </>
     );
   };
@@ -130,7 +148,7 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
     setFeedback(
       <>
         <span>{`${correctChar} ≠ ${inputValue} `}</span>
-        <CircleX className="inline text-[var(--main-color)]" />
+        <CircleX className='inline text-[var(--main-color)]' />
       </>
     );
     playErrorTwice();
@@ -148,7 +166,7 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
     const sourceArray = isReverse
       ? selectedKanjiObjs.map(obj => obj.meanings[0])
       : selectedKanjiObjs.map(obj => obj.kanjiChar);
-    
+
     let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
     while (newChar === correctChar) {
       newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
@@ -161,11 +179,13 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
     e.currentTarget.blur();
     setInputValue('');
     generateNewCharacter();
-    
-    const displayTarget = isReverse 
-      ? targetChar 
-      : Array.isArray(targetChar) ? targetChar[0] : targetChar;
-    
+
+    const displayTarget = isReverse
+      ? targetChar
+      : Array.isArray(targetChar)
+      ? targetChar[0]
+      : targetChar;
+
     setFeedback(<>{`skipped ~ ${correctChar} = ${displayTarget}`}</>);
   };
 
@@ -183,48 +203,52 @@ const KanjiInputGame = ({ selectedKanjiObjs, isHidden, isReverse = false }: Kanj
         isHidden ? 'hidden' : ''
       )}
     >
-      <GameIntel
-        feedback={feedback}
-        gameMode={gameMode}
-      />
-      
-      <p
-        className={textSize}
-        lang={displayCharLang}
-      >
-        {correctChar}
-      </p>
-      
-      <input
-        ref={inputRef}
-        type="text"
-        value={inputValue}
-        className={clsx(
-          'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
-          'border-[var(--card-color)] focus:border-[var(--border-color)]'
-        )}
-        onChange={e => setInputValue(e.target.value)}
-        onKeyDown={handleEnter}
-        lang={inputLang}
-        autoFocus={!isReverse}
-      />
-      
-      <button
-        ref={buttonRef}
-        className={clsx(
-          'text-xl font-medium py-4 px-16',
-          buttonBorderStyles,
-          'active:scale-95 md:active:scale-98 active:duration-200',
-          'flex flex-row items-end gap-2',
-          'text-[var(--secondary-color)]'
-        )}
-        onClick={handleSkip}
-      >
-        <span>skip</span>
-        <CircleArrowRight />
-      </button>
+      <GameIntel feedback={feedback} gameMode={gameMode} />
+      {displayAnswerSummary && (
+        <AnswerSummary
+          payload={currentKanjiObj}
+          setDisplayAnswerSummary={setDisplayAnswerSummary}
+          feedback={feedback}
+        />
+      )}
+      {!displayAnswerSummary && (
+        <>
+          <p className={textSize} lang={displayCharLang}>
+            {correctChar}
+          </p>
 
-      <Stars />
+          <input
+            ref={inputRef}
+            type='text'
+            value={inputValue}
+            className={clsx(
+              'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
+              'border-[var(--card-color)] focus:border-[var(--border-color)]'
+            )}
+            onChange={e => setInputValue(e.target.value)}
+            onKeyDown={handleEnter}
+            lang={inputLang}
+            autoFocus={!isReverse}
+          />
+
+          <button
+            ref={buttonRef}
+            className={clsx(
+              'text-xl font-medium py-4 px-16 ',
+              buttonBorderStyles,
+              'active:scale-95 md:active:scale-98 active:duration-200',
+              'flex flex-row items-end gap-2',
+              'text-[var(--secondary-color)]'
+            )}
+            onClick={handleSkip}
+          >
+            <span>skip</span>
+            <CircleArrowRight />
+          </button>
+
+          <Stars />
+        </>
+      )}
     </div>
   );
 };

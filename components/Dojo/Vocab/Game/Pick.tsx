@@ -12,6 +12,7 @@ import { useStopwatch } from 'react-timer-hook';
 import useStats from '@/lib/hooks/useStats';
 import useStatsStore from '@/store/useStatsStore';
 import Stars from '@/components/reusable/Game/Stars';
+import AnswerSummary from '@/components/reusable/Game/AnswerSummary';
 
 const random = new Random();
 
@@ -51,9 +52,12 @@ const VocabPickGame = ({
   );
 
   // Find the correct object based on the current mode
-  const correctWordObj = isReverse
-    ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
-    : selectedWordObjs.find(obj => obj.word === correctChar);
+  const correctWordObj = (
+    isReverse
+      ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
+      : selectedWordObjs.find(obj => obj.word === correctChar)
+  )!;
+  const [currentWordObj, setCurrentWordObj] = useState(correctWordObj);
 
   const targetChar = isReverse
     ? correctWordObj?.word
@@ -88,6 +92,7 @@ const VocabPickGame = ({
     ) as string[]
   );
 
+  const [displayAnswerSummary, setDisplayAnswerSummary] = useState(false);
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
   const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>(
     []
@@ -124,6 +129,7 @@ const VocabPickGame = ({
 
   const handleOptionClick = (selectedOption: string) => {
     if (selectedOption === targetChar) {
+      setDisplayAnswerSummary(true);
       handleCorrectAnswer();
       generateNewCharacter();
       setFeedback(
@@ -132,6 +138,7 @@ const VocabPickGame = ({
           <CircleCheck className='inline text-[var(--main-color)]' />
         </>
       );
+      setCurrentWordObj(correctWordObj);
     } else {
       handleWrongAnswer(selectedOption);
       setFeedback(
@@ -193,53 +200,64 @@ const VocabPickGame = ({
       )}
     >
       <GameIntel feedback={feedback} gameMode={gameMode} />
+      {displayAnswerSummary && (
+        <AnswerSummary
+          payload={currentWordObj}
+          setDisplayAnswerSummary={setDisplayAnswerSummary}
+          feedback={feedback}
+        />
+      )}
 
-      <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
-        {correctChar}
-      </p>
+      {!displayAnswerSummary && (
+        <>
+          <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
+            {correctChar}
+          </p>
 
-      <div
-        className={clsx(
-          'flex flex-col w-full gap-6 lg:gap-0 lg:justify-evenly',
-          'lg:flex-row'
-        )}
-      >
-        {shuffledOptions.map((option, i) => (
-          <button
-            ref={elem => {
-              buttonRefs.current[i] = elem;
-            }}
-            key={option + i}
-            type='button'
-            disabled={wrongSelectedAnswers.includes(option)}
+          <div
             className={clsx(
-              'py-4 px-2 rounded-xl w-full lg:w-1/4 flex flex-row justify-center items-center gap-1.5',
-              buttonBorderStyles,
-              'active:scale-95 md:active:scale-98 active:duration-200',
-              'text-[var(--border-color)]',
-              isReverse ? 'text-4xl' : 'text-3xl',
-              wrongSelectedAnswers.includes(option) &&
-                'hover:bg-[var(--card-color)]',
-              !wrongSelectedAnswers.includes(option) &&
-                'hover:scale-110 text-[var(--main-color)] hover:text-[var(--secondary-color)]'
+              'flex flex-col w-full gap-6 lg:gap-0 lg:justify-evenly',
+              'lg:flex-row'
             )}
-            onClick={() => handleOptionClick(option)}
-            lang={optionLang}
           >
-            <span>{option}</span>
-            <span
-              className={clsx(
-                'hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1',
-                'text-[var(--secondary-color)]'
-              )}
-            >
-              {i + 1 === 1 ? '1' : i + 1 === 2 ? '2' : '3'}
-            </span>
-          </button>
-        ))}
-      </div>
+            {shuffledOptions.map((option, i) => (
+              <button
+                ref={elem => {
+                  buttonRefs.current[i] = elem;
+                }}
+                key={option + i}
+                type='button'
+                disabled={wrongSelectedAnswers.includes(option)}
+                className={clsx(
+                  'py-4 px-2 rounded-xl w-full lg:w-1/4 flex flex-row justify-center items-center gap-1.5',
+                  buttonBorderStyles,
+                  'active:scale-95 md:active:scale-98 active:duration-200',
+                  'text-[var(--border-color)]',
+                  isReverse ? 'text-4xl' : 'text-3xl',
+                  wrongSelectedAnswers.includes(option) &&
+                    'hover:bg-[var(--card-color)]',
+                  !wrongSelectedAnswers.includes(option) &&
+                    'hover:scale-110 text-[var(--main-color)] hover:text-[var(--secondary-color)]'
+                )}
+                onClick={() => handleOptionClick(option)}
+                lang={optionLang}
+              >
+                <span>{option}</span>
+                <span
+                  className={clsx(
+                    'hidden lg:inline text-xs rounded-full bg-[var(--border-color)] px-1',
+                    'text-[var(--secondary-color)]'
+                  )}
+                >
+                  {i + 1 === 1 ? '1' : i + 1 === 2 ? '2' : '3'}
+                </span>
+              </button>
+            ))}
+          </div>
 
-      <Stars />
+          <Stars />
+        </>
+      )}
     </div>
   );
 };

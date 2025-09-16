@@ -1,5 +1,5 @@
 'use client';
-import { lazy, Suspense, useState } from 'react';
+import { Fragment, lazy, Suspense, useState } from 'react';
 import Link from 'next/link';
 import Banner from './Banner';
 import Info from '@/components/reusable/Menu/Info';
@@ -192,8 +192,8 @@ const MainMenu = () => {
           )}
         >
           {links.map((link, i) => (
-            <>
-              <Link href={link.href} key={i} className={clsx('w-full')}>
+            <Fragment key={i}>
+              <Link href={link.href} className={clsx('w-full')}>
                 <button
                   className={clsx(
                     'flex w-full h-full text-2xl',
@@ -229,7 +229,7 @@ const MainMenu = () => {
                   )}
                 />
               )}
-            </>
+            </Fragment>
           ))}
         </div>
       </div>

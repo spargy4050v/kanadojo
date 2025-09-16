@@ -88,10 +88,6 @@ const GameIntel = ({
               }}
             />
           </p>
-
-          <p className='text-xl flex justify-center items-center gap-1.5 px-4 py-2 border-t-1 w-full  border-[var(--border-color)]'>
-            {feedback}
-          </p>
         </div>
 
         <div
@@ -139,6 +135,11 @@ const GameIntel = ({
           </button>
         </div>
       </div>
+
+     {/*  <p className='text-xl flex justify-center items-center gap-1.5 px-4 py-3 border-t-1 w-full  border-[var(--border-color)]'>
+        {feedback}
+      </p>
+ */}
       <p
         className={clsx(
           'p-4 border-t-1 w-full border-[var(--border-color)] flex gap-2  items-center',

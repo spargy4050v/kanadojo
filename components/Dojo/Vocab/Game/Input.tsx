@@ -20,7 +20,11 @@ interface VocabInputGameProps {
   isReverse?: boolean;
 }
 
-const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: VocabInputGameProps) => {
+const VocabInputGame = ({
+  selectedWordObjs,
+  isHidden,
+  isReverse = false
+}: VocabInputGameProps) => {
   const score = useStatsStore(state => state.score);
   const setScore = useStatsStore(state => state.setScore);
 
@@ -31,7 +35,7 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
     incrementWrongAnswers,
     addCharacterToHistory,
     addCorrectAnswerTime,
-    incrementCharacterScore,
+    incrementCharacterScore
   } = useStats();
 
   const { playClick } = useClick();
@@ -46,7 +50,8 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
   // State management based on mode
   const [correctChar, setCorrectChar] = useState(
     isReverse
-      ? selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].meanings[0]
+      ? selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)]
+          .meanings[0]
       : selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word
   );
 
@@ -55,11 +60,10 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
     ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
     : selectedWordObjs.find(obj => obj.word === correctChar);
 
-  const targetChar = isReverse
-    ? correctObj?.word
-    : correctObj?.meanings;
+  const targetChar = isReverse ? correctObj?.word : correctObj?.meanings;
 
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
+  console.log(feedback);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -98,7 +102,9 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
   const isInputCorrect = (input: string): boolean => {
     if (!isReverse) {
       // Normal mode: input should match any of the meanings (case insensitive)
-      return Array.isArray(targetChar) && targetChar.includes(input.toLowerCase());
+      return (
+        Array.isArray(targetChar) && targetChar.includes(input.toLowerCase())
+      );
     } else {
       // Reverse mode: input should match the exact word
       return input === targetChar;
@@ -120,7 +126,7 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
     setFeedback(
       <>
         <span>{`${correctChar} = ${userInput} `}</span>
-        <CircleCheck className="inline text-[var(--main-color)]" />
+        <CircleCheck className='inline text-[var(--main-color)]' />
       </>
     );
   };
@@ -130,7 +136,7 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
     setFeedback(
       <>
         <span>{`${correctChar} ≠ ${inputValue} `}</span>
-        <CircleX className="inline text-[var(--main-color)]" />
+        <CircleX className='inline text-[var(--main-color)]' />
       </>
     );
     playErrorTwice();
@@ -148,7 +154,7 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
     const sourceArray = isReverse
       ? selectedWordObjs.map(obj => obj.meanings[0])
       : selectedWordObjs.map(obj => obj.word);
-    
+
     let newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
     while (newChar === correctChar) {
       newChar = sourceArray[random.integer(0, sourceArray.length - 1)];
@@ -161,11 +167,13 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
     e.currentTarget.blur();
     setInputValue('');
     generateNewCharacter();
-    
-    const displayTarget = isReverse 
-      ? targetChar 
-      : Array.isArray(targetChar) ? targetChar[0] : targetChar;
-    
+
+    const displayTarget = isReverse
+      ? targetChar
+      : Array.isArray(targetChar)
+      ? targetChar[0]
+      : targetChar;
+
     setFeedback(<>{`skipped ~ ${correctChar} = ${displayTarget}`}</>);
   };
 
@@ -181,20 +189,15 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
         isHidden ? 'hidden' : ''
       )}
     >
-      <GameIntel
-        gameMode={gameMode}
-      />
-      
-      <p
-        className={clsx(textSize, 'text-center')}
-        lang={displayCharLang}
-      >
+      <GameIntel gameMode={gameMode} />
+
+      <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
         {correctChar}
       </p>
-      
+
       <input
         ref={inputRef}
-        type="text"
+        type='text'
         value={inputValue}
         className={clsx(
           'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
@@ -204,7 +207,7 @@ const VocabInputGame = ({ selectedWordObjs, isHidden, isReverse = false }: Vocab
         onKeyDown={handleEnter}
         lang={inputLang}
       />
-      
+
       <button
         ref={buttonRef}
         className={clsx(

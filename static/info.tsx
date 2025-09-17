@@ -6,7 +6,9 @@ const info = {
     header: (
       <p className='flex gap-2 items-center'>
         <span>Welcome to KanaDojo!</span>
-        <i className='text-[var(--secondary-color)] text-xs mt-1 max-md:hidden'>v0.1.1 (alpha)</i>
+        <i className='text-[var(--secondary-color)] text-xs mt-1 max-md:hidden'>
+          v0.1.2 (alpha)
+        </i>
       </p>
     ),
     content: (
@@ -18,7 +20,7 @@ const info = {
         <p className='text-lg text-[var(--secondary-color)]'>
           To begin, select a dojo and start training now!
         </p>
-        <p className='text-sm text-[var(--secondary-color)]'>
+{/*         <p className='text-sm text-[var(--secondary-color)]'>
           Want to support an independent project built by the community, for the
           community, and help KanaDojo continue growing? Then please consider
           donating{' '}
@@ -30,8 +32,7 @@ const info = {
             here
           </Link>{' '}
           - thank you!
-        </p>
-        {/* <i className='text-[var(--secondary-color)] text-xs md:hidden'>v0.1.1 (alpha)</i> */}
+        </p> */}
         <DevNotice />
       </>
     )

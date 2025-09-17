@@ -111,6 +111,7 @@ const PickGame = ({ isHidden, isReverse = false }: PickGameProps) => {
   );
 
   const [feedback, setFeedback] = useState(<>{'feeback ~'}</>);
+  console.log(feedback)
   const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>([]);
 
   useEffect(() => {

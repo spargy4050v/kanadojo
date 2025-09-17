@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 export interface IWordObj {
-  type?: 'word';
   word: string;
   reading: string;
   displayMeanings: string[];

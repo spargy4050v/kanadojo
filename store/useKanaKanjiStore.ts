@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 export interface IKanjiObj {
-  type?: 'kanji';
   id: number;
   kanjiChar: string;
   onyomi: string[];

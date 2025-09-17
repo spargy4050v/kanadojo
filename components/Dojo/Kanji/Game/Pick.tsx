@@ -191,6 +191,7 @@ const KanjiPickGame = ({
 
   const gameMode = isReverse ? 'reverse pick' : 'pick';
   const displayCharLang = isReverse ? undefined : 'ja';
+  
 
   return (
     <div

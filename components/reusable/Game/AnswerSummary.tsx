@@ -35,7 +35,13 @@ const AnswerSummary = ({
     };
   });
 
-  return payload.type === 'kanji' ? (
+
+  // Type guard to check if payload is IKanjiObj
+  const isKanjiObj = (obj: IKanjiObj | IWordObj): obj is IKanjiObj => {
+    return (obj as IKanjiObj).kanjiChar !== undefined;
+  };
+
+  return isKanjiObj(payload) ? (
     <div
       key={payload.id}
       className={clsx(
@@ -132,7 +138,7 @@ const AnswerSummary = ({
         <CircleArrowRight />
       </button>
     </div>
-  ) : (
+  ) :  (
     <div
       key={payload.word}
       className={clsx(
@@ -173,7 +179,7 @@ const AnswerSummary = ({
         <CircleArrowRight />
       </button>
     </div>
-  );
+  )
 };
 
 export default AnswerSummary;

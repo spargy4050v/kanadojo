@@ -13,9 +13,11 @@ import useVocabStore from '@/store/useVocabStore';
 import { usePathname } from 'next/navigation';
 
 const GameIntel = ({
-  gameMode
+  gameMode,
+  feedback
 }: {
   gameMode: string;
+  feedback?: React.JSX.Element;
 }) => {
   const numCorrectAnswers = useStatsStore(state => state.numCorrectAnswers);
   const numWrongAnswers = useStatsStore(state => state.numWrongAnswers);
@@ -134,10 +136,12 @@ const GameIntel = ({
         </div>
       </div>
 
-     {/*  <p className='text-xl flex justify-center items-center gap-1.5 px-4 py-3 border-t-1 w-full  border-[var(--border-color)]'>
-        {feedback}
-      </p>
- */}
+      {feedback && (
+        <p className='text-xl flex justify-center items-center gap-1.5 px-4 py-3 border-t-1 w-full  border-[var(--border-color)]'>
+          {feedback}
+        </p>
+      )}
+
       <p
         className={clsx(
           'p-4 border-t-1 w-full border-[var(--border-color)] flex gap-2  items-center',

@@ -65,7 +65,6 @@ const InputGame = ({ isHidden, isReverse = false }: InputGameProps) => {
   const targetChar = selectedPairs[correctChar];
 
   const [feedback, setFeedback] = useState(<>{'feeback ~'}</>);
-  console.log(feedback)
 
   useEffect(() => {
     if (inputRef.current) {
@@ -172,6 +171,7 @@ const InputGame = ({ isHidden, isReverse = false }: InputGameProps) => {
     >
       <GameIntel
         gameMode={gameMode}
+        feedback={feedback}
       />
       <p className="text-8xl sm:text-9xl font-medium">{correctChar}</p>
       <input

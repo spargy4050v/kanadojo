@@ -11,6 +11,7 @@ import { useStopwatch } from 'react-timer-hook';
 import useStats from '@/lib/hooks/useStats';
 import useStatsStore from '@/store/useStatsStore';
 import Stars from '@/components/reusable/Game/Stars';
+import AnswerSummary from '@/components/reusable/Game/AnswerSummary';
 
 const random = new Random();
 
@@ -56,14 +57,20 @@ const VocabInputGame = ({
   );
 
   // Find the target character/meaning based on mode
-  const correctObj = isReverse
-    ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
-    : selectedWordObjs.find(obj => obj.word === correctChar);
+  const correctWordObj = (
+    isReverse
+      ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
+      : selectedWordObjs.find(obj => obj.word === correctChar)
+  )!;
 
-  const targetChar = isReverse ? correctObj?.word : correctObj?.meanings;
+  const [currentWordObj, setCurrentWordObj] = useState(correctWordObj);
 
+  const targetChar = isReverse
+    ? correctWordObj?.word
+    : correctWordObj?.meanings;
+
+  const [displayAnswerSummary, setDisplayAnswerSummary] = useState(false);
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
-  console.log(feedback);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -93,6 +100,7 @@ const VocabInputGame = ({
     if (e.key === 'Enter') {
       if (isInputCorrect(inputValue.trim())) {
         handleCorrectAnswer(inputValue.trim());
+        setDisplayAnswerSummary(true);
       } else {
         handleWrongAnswer();
       }
@@ -115,6 +123,8 @@ const VocabInputGame = ({
     speedStopwatch.pause();
     addCorrectAnswerTime(speedStopwatch.totalMilliseconds / 1000);
     speedStopwatch.reset();
+    setCurrentWordObj(correctWordObj);
+
     playCorrect();
     addCharacterToHistory(correctChar);
     incrementCharacterScore(correctChar, 'correct');
@@ -125,7 +135,9 @@ const VocabInputGame = ({
     generateNewCharacter();
     setFeedback(
       <>
-        <span>{`${correctChar} = ${userInput} `}</span>
+        <span className='text-[var(--secondary-color)]'>{`${correctChar} = ${userInput
+          .trim()
+          .toLowerCase()} `}</span>
         <CircleCheck className='inline text-[var(--main-color)]' />
       </>
     );
@@ -135,7 +147,9 @@ const VocabInputGame = ({
     setInputValue('');
     setFeedback(
       <>
-        <span>{`${correctChar} ≠ ${inputValue} `}</span>
+        <span className='text-[var(--secondary-color)]'>{`${correctChar} ≠ ${inputValue
+          .trim()
+          .toLowerCase()} `}</span>
         <CircleX className='inline text-[var(--main-color)]' />
       </>
     );
@@ -165,6 +179,8 @@ const VocabInputGame = ({
   const handleSkip = (e: React.MouseEvent<HTMLButtonElement>) => {
     playClick();
     e.currentTarget.blur();
+    setCurrentWordObj(correctWordObj);
+    setDisplayAnswerSummary(true);
     setInputValue('');
     generateNewCharacter();
 
@@ -191,39 +207,50 @@ const VocabInputGame = ({
     >
       <GameIntel gameMode={gameMode} />
 
-      <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
-        {correctChar}
-      </p>
+      {displayAnswerSummary && (
+        <AnswerSummary
+          payload={currentWordObj}
+          setDisplayAnswerSummary={setDisplayAnswerSummary}
+          feedback={feedback}
+        />
+      )}
+      {!displayAnswerSummary && (
+        <>
+          <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
+            {correctChar}
+          </p>
 
-      <input
-        ref={inputRef}
-        type='text'
-        value={inputValue}
-        className={clsx(
-          'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
-          'border-[var(--card-color)] focus:border-[var(--border-color)]'
-        )}
-        onChange={e => setInputValue(e.target.value)}
-        onKeyDown={handleEnter}
-        lang={inputLang}
-      />
+          <input
+            ref={inputRef}
+            type='text'
+            value={inputValue}
+            className={clsx(
+              'border-b-2 pb-1 text-center focus:outline-none text-2xl lg:text-5xl',
+              'border-[var(--card-color)] focus:border-[var(--border-color)]'
+            )}
+            onChange={e => setInputValue(e.target.value)}
+            onKeyDown={handleEnter}
+            lang={inputLang}
+          />
 
-      <button
-        ref={buttonRef}
-        className={clsx(
-          'text-xl font-medium py-4 px-16',
-          buttonBorderStyles,
-          'flex flex-row items-end gap-2',
-          'active:scale-95 md:active:scale-98 active:duration-225',
-          'text-[var(--secondary-color)]'
-        )}
-        onClick={handleSkip}
-      >
-        <span>skip</span>
-        <CircleArrowRight />
-      </button>
+          <button
+            ref={buttonRef}
+            className={clsx(
+              'text-xl font-medium py-4 px-16',
+              buttonBorderStyles,
+              'flex flex-row items-end gap-2',
+              'active:scale-95 md:active:scale-98 active:duration-225',
+              'text-[var(--secondary-color)]'
+            )}
+            onClick={handleSkip}
+          >
+            <span>skip</span>
+            <CircleArrowRight />
+          </button>
 
-      <Stars />
+          <Stars />
+        </>
+      )}
     </div>
   );
 };

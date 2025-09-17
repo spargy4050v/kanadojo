@@ -110,8 +110,7 @@ const PickGame = ({ isHidden, isReverse = false }: PickGameProps) => {
         )
   );
 
-  const [feedback, setFeedback] = useState(<>{'feeback ~'}</>);
-  console.log(feedback)
+  const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
   const [wrongSelectedAnswers, setWrongSelectedAnswers] = useState<string[]>([]);
 
   useEffect(() => {
@@ -248,6 +247,7 @@ const PickGame = ({ isHidden, isReverse = false }: PickGameProps) => {
     >
       <GameIntel
         gameMode={gameMode}
+        feedback={feedback}
       />
       <p className="text-8xl sm:text-9xl font-medium">{displayChar}</p>
       <div className="flex flex-row w-full gap-5 sm:gap-0 sm:justify-evenly">

@@ -136,7 +136,7 @@ const KanjiPickGame = ({
       generateNewCharacter();
       setFeedback(
         <>
-          <span>{`${correctChar} = ${selectedOption} `}</span>
+          <span className='text-[var(--secondary-color)]'>{`${correctChar} = ${selectedOption} `}</span>
           <CircleCheck className='inline text-[var(--main-color)]' />
         </>
       );
@@ -144,7 +144,7 @@ const KanjiPickGame = ({
       handleWrongAnswer(selectedOption);
       setFeedback(
         <>
-          <span>{`${correctChar} ≠ ${selectedOption} `}</span>
+          <span className='text-[var(--secondary-color)]'>{`${correctChar} ≠ ${selectedOption} `}</span>
           <CircleX className='inline text-[var(--main-color)]' />
         </>
       );
@@ -191,7 +191,6 @@ const KanjiPickGame = ({
 
   const gameMode = isReverse ? 'reverse pick' : 'pick';
   const displayCharLang = isReverse ? undefined : 'ja';
-  
 
   return (
     <div
@@ -201,7 +200,7 @@ const KanjiPickGame = ({
         !isReverse && 'max-md:pb-12'
       )}
     >
-      <GameIntel  gameMode={gameMode} />
+      <GameIntel gameMode={gameMode} />
       {displayAnswerSummary && (
         <AnswerSummary
           payload={currentKanjiObj}

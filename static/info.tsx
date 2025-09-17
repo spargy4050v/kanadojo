@@ -6,7 +6,7 @@ const info = {
     header: (
       <p className='flex gap-2 items-center'>
         <span>Welcome to KanaDojo!</span>
-        <i className='text-[var(--secondary-color)] text-xs mt-1 max-md:hidden'>
+        <i className='text-[var(--secondary-color)] text-xs mt-1.5 max-md:hidden'>
           v0.1.2 (alpha)
         </i>
       </p>

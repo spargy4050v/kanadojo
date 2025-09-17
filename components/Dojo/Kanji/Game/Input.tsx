@@ -100,7 +100,6 @@ const KanjiInputGame = ({
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (isInputCorrect(inputValue.trim())) {
-        console.log('Correct');
         setDisplayAnswerSummary(true);
         handleCorrectAnswer(inputValue.trim());
       } else {
@@ -137,7 +136,9 @@ const KanjiInputGame = ({
     generateNewCharacter();
     setFeedback(
       <>
-        <span>{`${correctChar} = ${userInput.trim().toLowerCase()} `}</span>
+        <span className='text-[var(--secondary-color)]'>{`${correctChar} = ${userInput
+          .trim()
+          .toLowerCase()} `}</span>
         <CircleCheck className='inline text-[var(--main-color)]' />
       </>
     );
@@ -147,7 +148,10 @@ const KanjiInputGame = ({
     setInputValue('');
     setFeedback(
       <>
-        <span>{`${correctChar} ≠ ${inputValue} `}</span>
+        <span className='text-[var(--secondary-color)]'>{`${correctChar} ≠ ${inputValue
+          .trim()
+          .toLowerCase()} `}</span>
+
         <CircleX className='inline text-[var(--main-color)]' />
       </>
     );
@@ -203,7 +207,7 @@ const KanjiInputGame = ({
         isHidden ? 'hidden' : ''
       )}
     >
-      <GameIntel  gameMode={gameMode} />
+      <GameIntel gameMode={gameMode} />
       {displayAnswerSummary && (
         <AnswerSummary
           payload={currentKanjiObj}

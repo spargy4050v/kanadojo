@@ -4,6 +4,7 @@ import { IWordObj } from '@/store/useVocabStore';
 import { buttonBorderStyles } from '@/static/styles';
 import { CircleArrowRight } from 'lucide-react';
 import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
+import { useClick } from '@/lib/hooks/useAudio';
 
 const AnswerSummary = ({
   payload,
@@ -16,6 +17,8 @@ const AnswerSummary = ({
   setDisplayAnswerSummary: Dispatch<SetStateAction<boolean>>;
   feedback: React.ReactElement;
 }) => {
+  const { playClick } = useClick();
+
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
@@ -34,7 +37,6 @@ const AnswerSummary = ({
       window.removeEventListener('keydown', handleKeyDown);
     };
   });
-
 
   // Type guard to check if payload is IKanjiObj
   const isKanjiObj = (obj: IKanjiObj | IWordObj): obj is IKanjiObj => {
@@ -138,7 +140,7 @@ const AnswerSummary = ({
         <CircleArrowRight />
       </button>
     </div>
-  ) :  (
+  ) : (
     <div
       key={payload.word}
       className={clsx(
@@ -173,13 +175,16 @@ const AnswerSummary = ({
           buttonBorderStyles,
           'flex flex-row justify-center items-end gap-2'
         )}
-        onClick={() => setDisplayAnswerSummary(false)}
+        onClick={() => {
+          setDisplayAnswerSummary(false);
+          playClick();
+        }}
       >
         <span>continue</span>
         <CircleArrowRight />
       </button>
     </div>
-  )
+  );
 };
 
 export default AnswerSummary;

@@ -121,7 +121,11 @@ const Sidebar = () => {
         )}
         onClick={playClick}
       >
-        <Sparkles className='' />
+        <Sparkles
+          className={clsx(
+            pathname !== '/preferences' && 'motion-safe:animate-bounce'
+          )}
+        />
         <span className='max-lg:hidden'>Preferences</span>
       </Link>
     </div>

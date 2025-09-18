@@ -48,7 +48,6 @@ const AnswerSummary = ({
       key={payload.id}
       className={clsx(
         'flex flex-col justify-start items-center gap-4 py-4 w-full md:w-3/4 lg:w-1/2 '
-        // 'bg-[var(--card-color)] rounded-2xl p-4'
       )}
     >
       <p className='text-xl flex justify-center items-center gap-1.5 px-4 py-3 border-b-1 border-t-1 w-full  border-[var(--border-color)] '>
@@ -144,14 +143,14 @@ const AnswerSummary = ({
     <div
       key={payload.word}
       className={clsx(
-        'flex flex-col justify-start items-start gap-4 py-4 max-md:px-4'
+        'flex flex-col justify-start items-start gap-4 py-4 w-full md:w-3/4 lg:w-1/2 '
       )}
     >
       <p className='text-xl flex justify-center items-center gap-1.5 px-4 py-3 border-b-1 border-t-1 w-full  border-[var(--border-color)] '>
         {feedback}
       </p>
 
-      <p lang='ja' className='text-6xl '>
+      <p lang='ja' className='text-6xl flex justify-center w-full'>
         {payload.word}
       </p>
       <div className='flex flex-col gap-2 items-start'>
@@ -176,8 +175,8 @@ const AnswerSummary = ({
           'flex flex-row justify-center items-end gap-2'
         )}
         onClick={() => {
-          setDisplayAnswerSummary(false);
           playClick();
+          setDisplayAnswerSummary(false);
         }}
       >
         <span>continue</span>

@@ -134,7 +134,7 @@ const VocabPickGame = ({
       generateNewCharacter();
       setFeedback(
         <>
-          <span>{`${correctChar} = ${selectedOption} `}</span>
+          <span className='text-[var(--secondary-color)]'>{`${correctChar} = ${selectedOption} `}</span>
           <CircleCheck className='inline text-[var(--main-color)]' />
         </>
       );
@@ -143,7 +143,7 @@ const VocabPickGame = ({
       handleWrongAnswer(selectedOption);
       setFeedback(
         <>
-          <span>{`${correctChar} ≠ ${selectedOption} `}</span>
+          <span className='text-[var(--secondary-color)]'>{`${correctChar} ≠ ${selectedOption} `}</span>
           <CircleX className='inline text-[var(--main-color)]' />
         </>
       );

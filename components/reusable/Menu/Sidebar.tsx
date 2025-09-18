@@ -122,6 +122,7 @@ const Sidebar = () => {
         onClick={playClick}
       >
         <Sparkles
+          // size={32}
           className={clsx(
             pathname !== '/preferences' && 'motion-safe:animate-bounce'
           )}

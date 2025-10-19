@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 // import useKanaKanjiStore from '@/store/useKanaKanjiStore';
-import React, { useEffect, useState } from 'react';
 import useKanaStore from '@/store/useKanaStore';
 import useStatsStore from '@/store/useStatsStore';
 import { useChallengeTimer } from '@/hooks/useTimer';

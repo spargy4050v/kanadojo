@@ -4,20 +4,22 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 import { Trophy, X } from 'lucide-react';
-import useAchievementStore, { type AchievementNotification as NotificationType } from '@/store/useAchievementStore';
+import useAchievementStore, {
+  type AchievementNotification as NotificationType,
+} from '@/store/useAchievementStore';
 import { useClick } from '@/lib/hooks/useAudio';
 import { cardBorderStyles } from '@/static/styles';
 
 interface AchievementNotificationProps {
   notification: NotificationType;
   onDismiss: (id: string) => void;
-  onViewDetails: (achievement: any) => void;
+  onViewDetails: (achievement: NotificationType['achievement']) => void;
 }
 
-const AchievementNotification = ({ 
-  notification, 
-  onDismiss, 
-  onViewDetails 
+const AchievementNotification = ({
+  notification,
+  onDismiss,
+  onViewDetails,
 }: AchievementNotificationProps) => {
   const { playClick } = useClick();
   const [isVisible, setIsVisible] = useState(true);
@@ -57,7 +59,7 @@ const AchievementNotification = ({
           initial={{ x: 400, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           className={clsx(
             'relative w-80 p-4 cursor-pointer',
             'bg-[var(--card-color)] shadow-lg',
@@ -82,10 +84,12 @@ const AchievementNotification = ({
           <div className="flex items-start gap-3 pr-6">
             {/* Achievement Icon */}
             <div className="flex-shrink-0">
-              <div className={clsx(
-                'w-10 h-10 rounded-full flex items-center justify-center',
-                'bg-yellow-100 text-yellow-600 text-lg font-bold'
-              )}>
+              <div
+                className={clsx(
+                  'w-10 h-10 rounded-full flex items-center justify-center',
+                  'bg-yellow-100 text-yellow-600 text-lg font-bold'
+                )}
+              >
                 {notification.achievement.icon}
               </div>
             </div>
@@ -93,20 +97,23 @@ const AchievementNotification = ({
             {/* Content */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <Trophy size={14} className="text-yellow-500" />
+                <Trophy
+                  size={14}
+                  className="text-yellow-500"
+                />
                 <span className="text-xs font-semibold text-yellow-600 uppercase tracking-wide">
                   Achievement Unlocked
                 </span>
               </div>
-              
+
               <h4 className="font-semibold text-[var(--main-color)] text-sm mb-1 truncate">
                 {notification.achievement.title}
               </h4>
-              
+
               <p className="text-xs text-[var(--secondary-color)] line-clamp-2">
                 {notification.achievement.description}
               </p>
-              
+
               <div className="flex items-center justify-between mt-2">
                 <span className="text-xs text-yellow-600 font-medium">
                   +{notification.achievement.points} points
@@ -120,9 +127,9 @@ const AchievementNotification = ({
 
           {/* Progress bar animation */}
           <motion.div
-            initial={{ width: "100%" }}
-            animate={{ width: "0%" }}
-            transition={{ duration: 8, ease: "linear" }}
+            initial={{ width: '100%' }}
+            animate={{ width: '0%' }}
+            transition={{ duration: 8, ease: 'linear' }}
             className="absolute bottom-0 left-0 h-1 bg-yellow-500 rounded-b-lg"
           />
         </motion.div>
@@ -135,8 +142,12 @@ const AchievementNotification = ({
 export const AchievementNotificationContainer = () => {
   const [isClient, setIsClient] = useState(false);
   const notifications = useAchievementStore(state => state.unseenNotifications);
-  const markNotificationSeen = useAchievementStore(state => state.markNotificationSeen);
-  const [selectedAchievement, setSelectedAchievement] = useState<any>(null);
+  const markNotificationSeen = useAchievementStore(
+    state => state.markNotificationSeen
+  );
+  const [selectedAchievement, setSelectedAchievement] = useState<
+    NotificationType['achievement'] | null
+  >(null);
   const [showModal, setShowModal] = useState(false);
 
   // Client-side only initialization
@@ -154,7 +165,7 @@ export const AchievementNotificationContainer = () => {
     markNotificationSeen(notificationId);
   };
 
-  const handleViewDetails = (achievement: any) => {
+  const handleViewDetails = (achievement: NotificationType['achievement']) => {
     setSelectedAchievement(achievement);
     setShowModal(true);
   };
@@ -200,7 +211,7 @@ export const AchievementNotificationContainer = () => {
               'bg-[var(--card-color)]',
               cardBorderStyles
             )}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <div className="text-4xl mb-4">{selectedAchievement.icon}</div>
             <h3 className="text-xl font-bold text-[var(--main-color)] mb-2">

@@ -86,7 +86,7 @@ const AchievementModal = ({
 
       // Trigger confetti animation
       const config = rarityConfig[achievement.rarity];
-      const colors = config.confettiColors;
+      // const colors = config.confettiColors;
 
       // Multiple confetti bursts for higher rarity
       const burstCount =

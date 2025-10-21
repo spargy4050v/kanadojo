@@ -131,3 +131,4 @@ const KanjiSetDictionary = ({ set }: { set: string }) => {
 };
 
 export default KanjiSetDictionary;
+

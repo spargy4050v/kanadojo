@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { buttonBorderStyles } from '@/static/styles';
 import useThemeStore from '@/store/useThemeStore';
 import { useClick } from '@/lib/hooks/useAudio';
-import { AudioLines, VolumeX, Volume2, Settings } from 'lucide-react';
+import { AudioLines, VolumeX, Volume2 } from 'lucide-react';
 // import{Command, KeyboardOff} from 'lucide-react'
 // import HotkeyReference from './HotkeyReference';
 
@@ -17,12 +17,20 @@ const Behavior = () => {
   const setSilentMode = useThemeStore(state => state.setSilentMode);
 
   // Pronunciation settings
-  const pronunciationEnabled = useThemeStore(state => state.pronunciationEnabled);
-  const setPronunciationEnabled = useThemeStore(state => state.setPronunciationEnabled);
+  const pronunciationEnabled = useThemeStore(
+    state => state.pronunciationEnabled
+  );
+  const setPronunciationEnabled = useThemeStore(
+    state => state.setPronunciationEnabled
+  );
   const pronunciationSpeed = useThemeStore(state => state.pronunciationSpeed);
-  const setPronunciationSpeed = useThemeStore(state => state.setPronunciationSpeed);
+  const setPronunciationSpeed = useThemeStore(
+    state => state.setPronunciationSpeed
+  );
   const pronunciationPitch = useThemeStore(state => state.pronunciationPitch);
-  const setPronunciationPitch = useThemeStore(state => state.setPronunciationPitch);
+  const setPronunciationPitch = useThemeStore(
+    state => state.setPronunciationPitch
+  );
 
   /*   const hotkeysOn = useThemeStore(state => state.hotkeysOn);
   const setHotkeys = useThemeStore(state => state.setHotkeys);
@@ -124,7 +132,7 @@ const Behavior = () => {
           <VolumeX size={20} className='mb-1' />
         </button>
       </div>
-      
+
       <h4 className='text-lg'>Enable pronunciation audio:</h4>
       <div className='flex flex-row gap-4'>
         <button
@@ -183,7 +191,7 @@ const Behavior = () => {
               max='1.5'
               step='0.1'
               value={pronunciationSpeed}
-              onChange={(e) => setPronunciationSpeed(parseFloat(e.target.value))}
+              onChange={e => setPronunciationSpeed(parseFloat(e.target.value))}
               className='w-full'
             />
             <div className='text-sm text-[var(--secondary-color)] text-center'>
@@ -199,7 +207,7 @@ const Behavior = () => {
               max='2.0'
               step='0.1'
               value={pronunciationPitch}
-              onChange={(e) => setPronunciationPitch(parseFloat(e.target.value))}
+              onChange={e => setPronunciationPitch(parseFloat(e.target.value))}
               className='w-full'
             />
             <div className='text-sm text-[var(--secondary-color)] text-center'>
@@ -208,7 +216,7 @@ const Behavior = () => {
           </div>
         </>
       )}
-      
+
       {/*       <h4 className="text-lg">Enable hotkeys (desktop only):</h4>
       <div className="flex flex-row gap-4">
         <button

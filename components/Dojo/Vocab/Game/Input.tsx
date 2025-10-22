@@ -49,44 +49,26 @@ const VocabInputGame = ({
 
   const [inputValue, setInputValue] = useState('');
 
-  // Filter out any undefined or null entries
-  const validWordObjs = selectedWordObjs.filter(obj => obj && obj.word && obj.meanings && obj.meanings.length > 0);
-  
   // State management based on mode
   const [correctChar, setCorrectChar] = useState(
-    validWordObjs.length > 0
-      ? isReverse
-        ? validWordObjs[random.integer(0, validWordObjs.length - 1)].meanings[0]
-        : validWordObjs[random.integer(0, validWordObjs.length - 1)].word
-      : ''
+    isReverse
+      ? selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)]
+          .meanings[0]
+      : selectedWordObjs[random.integer(0, selectedWordObjs.length - 1)].word
   );
 
   // Find the target character/meaning based on mode
   const correctWordObj = (
     isReverse
-      ? validWordObjs.find(obj => obj && obj.meanings && obj.meanings[0] === correctChar)
-      : validWordObjs.find(obj => obj && obj.word === correctChar)
-  );
+      ? selectedWordObjs.find(obj => obj.meanings[0] === correctChar)
+      : selectedWordObjs.find(obj => obj.word === correctChar)
+  )!;
 
   const [currentWordObj, setCurrentWordObj] = useState(correctWordObj);
 
-  // Early return if no valid word objects
-  if (validWordObjs.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
-        <p className="text-lg text-[var(--secondary-color)] mb-4">
-          No valid vocabulary words found.
-        </p>
-        <p className="text-sm text-[var(--secondary-color)]">
-          Please select some vocabulary words to practice.
-        </p>
-      </div>
-    );
-  }
-
   const targetChar = isReverse
     ? correctWordObj?.word
-    : correctWordObj?.meanings[0];
+    : correctWordObj?.meanings;
 
   const [displayAnswerSummary, setDisplayAnswerSummary] = useState(false);
   const [feedback, setFeedback] = useState(<>{'feedback ~'}</>);
@@ -235,15 +217,15 @@ const VocabInputGame = ({
       )}
       {!displayAnswerSummary && (
         <>
-          <div className="flex flex-col items-center gap-4">
+          <div className='flex flex-col items-center gap-4'>
             <p className={clsx(textSize, 'text-center')} lang={displayCharLang}>
               {correctChar}
             </p>
-            <SSRAudioButton 
-              text={correctChar} 
-              variant="icon-only" 
-              size="lg"
-              className="bg-[var(--card-color)] border-[var(--border-color)]"
+            <SSRAudioButton
+              text={correctChar}
+              variant='icon-only'
+              size='lg'
+              className='bg-[var(--card-color)] border-[var(--border-color)]'
             />
           </div>
 

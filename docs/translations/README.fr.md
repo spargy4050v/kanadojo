@@ -186,6 +186,7 @@ KanaDojo est construit avec des technologies web modernes pour une performance e
    Naviguez vers [http://localhost:3000](http://localhost:3000)
 
 ### Build pour la Production
+
 ---
 
 ```bash
@@ -197,6 +198,7 @@ npm start
 ```
 
 ### Autres Commandes
+
 ---
 
 ```bash
@@ -261,6 +263,7 @@ kanadojo/
 ```
 
 ### Concepts Clés
+
 ---
 
 #### Flux de Gestion d'État
@@ -302,20 +305,23 @@ Ce projet est sous licence AGPL 3.0 - voir le fichier [LICENSE.md](LICENSE.md) p
 - Tous les contributeurs qui aident à améliorer KanaDojo
 
 ## Traductions
+
 KanaDojo est disponible en plusieurs langues grâce aux contributions de la communauté :
-- English (par défaut)
+
+- [English (par défaut)](../../README.md)
 - [Español](README.es.md)
-- [Français](README.fr.md)
-- [Deutsch](README.de.md) en cours
+- Français (ce document)
+- [Deutsch](README.de.md)
 - [Português](README.pt-br.md)
-- [中文](README.zh.md) en cours
+- [中文（简体）](README.zh-CN.md)
+- [中文（繁體）](README.zh-tw.md)
 - [हिन्दी](README.hin.md)
 
 ## 📞 Contact & Liens
 
 - **Site Web** : [kanadojo.com](https://kanadojo.com)
 - **Dépôt** : [github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
-- **Email** : reservecrate@gmail.com
+- **Email** : lingdojo.dev@gmail.com
 
 ---
 

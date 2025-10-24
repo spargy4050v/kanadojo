@@ -349,7 +349,20 @@ kanadojo/
 
 - **網站**：[kanadojo.com](https://kanadojo.com)
 - **儲存庫**：[github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
-- **電子郵件**: reservecrate@gmail.com
+- **電子郵件**: lingdojo.dev@gmail.com
+
+---
+
+## 🌍 翻譯
+
+- [English（預設）](../../README.md)
+- [Español](README.es.md)
+- [Français](README.fr.md)
+- [Deutsch](README.de.md)
+- [Português](README.pt-br.md)
+- 中文（繁體，當前文件）
+- [中文（简体）](README.zh-CN.md)
+- [हिन्दी](README.hin.md)
 
 ---
 

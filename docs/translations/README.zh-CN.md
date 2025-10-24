@@ -360,13 +360,14 @@ kanadojo/
 
 KanaDojo 因社区贡献而支持多语言：
 
-- English（默认）
-- Español（docs/README.es.md）
-- Français（docs/README.fr.md，进行中）
-- Deutsch（docs/README.de.md）
-- Português（docs/README.pt-br.md）
-- 中文（简体，当前文档；繁体见 docs/README.zh-tw.md）
-- हिन्दी（docs/README.hin.md）
+- [English（默认）](../../README.md)
+- [Español](README.es.md)
+- [Français](README.fr.md)（进行中）
+- [Deutsch](README.de.md)
+- [Português](README.pt-br.md)
+- 中文（简体，当前文档）
+- [中文（繁體）](README.zh-tw.md)
+- [हिन्दी](README.hin.md)
 
 ---
 
@@ -374,7 +375,7 @@ KanaDojo 因社区贡献而支持多语言：
 
 - **网站**： [kanadojo.com](https://kanadojo.com)
 - **仓库**： [github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
-- **邮箱**： reservecrate@gmail.com
+- **邮箱**： lingdojo.dev@gmail.com
 
 ---
 
@@ -385,4 +386,3 @@ KanaDojo 因社区贡献而支持多语言：
 がんばって！ (Ganbatte! - Do your best!)
 
 </div>
-

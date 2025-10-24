@@ -18,7 +18,7 @@
 
 ## 📖 Sobre KanaDojo
 
-KanaDojo es una plataforma de aprendizaje de japonés atractiva y basada en la web que hace que dominar Hiragana, Katakana, Kanji y  el vocabulario, sea divertido e intuitivo. Construido con un enfoque en la estética, la personalización y el aprendizaje efectivo, KanaDojo proporciona un entorno de entrenamiento inmersivo para los estudiantes de japonés de todos los niveles.
+KanaDojo es una plataforma de aprendizaje de japonés atractiva y basada en la web que hace que dominar Hiragana, Katakana, Kanji y el vocabulario, sea divertido e intuitivo. Construido con un enfoque en la estética, la personalización y el aprendizaje efectivo, KanaDojo proporciona un entorno de entrenamiento inmersivo para los estudiantes de japonés de todos los niveles.
 
 Ya sea que estés comenzando con los silabarios kana básicos o preparándote para los exámenes JLPT con kanji y vocabulario avanzados, KanaDojo ofrece una experiencia de aprendizaje simplificada y sin distracciones que se adapta a tus preferencias y estilo de aprendizaje.
 
@@ -281,7 +281,7 @@ kanadojo/
 
 1. El usuario selecciona contenido en los componentes del menú.
 2. Las selecciones se almacenan en los almacenes de Zustand (`useKanaKanjiStore`, `useVocabStore`).
-3. Los componentes de entrenamiento leen desde los  almacenes para generar preguntas.
+3. Los componentes de entrenamiento leen desde los almacenes para generar preguntas.
 4. Las estadísticas se rastrean y persisten en `useStatsStore`.
 5. Las preferencias del usuario se guardan en `useThemeStore` con persistencia en localStorage.
 
@@ -349,6 +349,20 @@ Este proyecto está bajo la Licencia AGPL 3.0 - consulta el archivo [LICENSE.md]
 
 - **Sitio Web**: [kanadojo.com](https://kanadojo.com)
 - **Repositorio**: [github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
+- **Email**: lingdojo.dev@gmail.com
+
+---
+
+## 🌍 Traducciones
+
+- [English (default)](../../README.md)
+- Español (este documento)
+- [Français](README.fr.md)
+- [Deutsch](README.de.md)
+- [Português](README.pt-br.md)
+- [中文（简体）](README.zh-CN.md)
+- [中文（繁體）](README.zh-tw.md)
+- [हिन्दी](README.hin.md)
 
 ---
 

@@ -69,15 +69,19 @@ Jedes Dojo unterstützt **vier fesselnde Trainingsmodi** zur Lernverstärkung:
 <div align="center">
 
 ### Startseite
+
 ![Home Page](https://github.com/user-attachments/assets/0bb2b37f-3e63-4f6f-a95f-32b60d6b9ef0)
 
 ### Kana-Auswahl
+
 ![Kana Selection](https://github.com/user-attachments/assets/04b8e4f6-e3b0-466d-8f62-96d31ab8130a)
 
 ### Trainingsmodus
+
 ![Training Mode](https://github.com/user-attachments/assets/f50d5b8e-d79f-4c21-9f90-8f0f42a3ff33)
 
 ### Anpassung & Themes
+
 ![Customization & Themes](https://github.com/user-attachments/assets/16ccc5a8-05d2-4e04-b6d5-10cf9ea9c9f3)
 
 </div>
@@ -347,7 +351,7 @@ Dieses Projekt ist unter der **AGPL 3.0 Lizenz** lizenziert – Details finden S
 
 KanaDojo ist dank Community-Beiträgen in mehreren Sprachen verfügbar:
 
-- [🇬🇧 Englisch (Standard)](README.md)
+- [🇬🇧 Englisch (Standard)](../../README.md)
 - [🇪🇸 Español](README.es.md)
 - [🇫🇷 Français](README.fr.md) _(in Bearbeitung)_
 - [🇮🇳 हिन्दी](README.hin.md)
@@ -361,7 +365,7 @@ KanaDojo ist dank Community-Beiträgen in mehreren Sprachen verfügbar:
 
 - **Webseite**: [https://kanadojo.com](https://kanadojo.com)
 - **Repository**: [https://github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
-- **E-Mail**: reservecrate@gmail.com
+- **E-Mail**: lingdojo.dev@gmail.com
 
 ---
 

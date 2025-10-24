@@ -349,6 +349,20 @@ Este projeto está licenciado sob a Licença AGPL 3.0 - veja o arquivo [LICENSE.
 
 - **Website**: [kanadojo.com](https://kanadojo.com)
 - **Repositório**: [github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
+- **Email**: lingdojo.dev@gmail.com
+
+---
+
+## 🌍 Traduções
+
+- [English (padrão)](../../README.md)
+- [Español](README.es.md)
+- [Français](README.fr.md)
+- [Deutsch](README.de.md)
+- Português (este documento)
+- [中文（简体）](README.zh-CN.md)
+- [中文（繁體）](README.zh-tw.md)
+- [हिन्दी](README.hin.md)
 
 ---
 

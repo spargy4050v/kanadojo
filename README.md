@@ -346,12 +346,13 @@ This project is licensed under the AGPL 3.0 License - see the [LICENSE.md](LICEN
 KanaDojo is available in multiple languages thanks to community contributions:
 
 - English (default)
-- [Español](README.es.md)
-- [Français](README.fr.md) in progress
-- [Deutsch](README.de.md)
-- [Português](README.pt-br.md)
-- [中文](README.zh.md) in progress
-- [हिन्दी](README.hin.md)
+- [Español](docs/translations/README.es.md)
+- [Français](docs/translations/README.fr.md) in progress
+- [Deutsch](docs/translations/README.de.md)
+- [Português](docs/translations/README.pt-br.md)
+- [中文（简体）](docs/translations/README.zh-CN.md)
+- [中文（繁體）](docs/translations/README.zh-tw.md)
+- [हिन्दी](docs/translations/README.hin.md)
 
 ## 📞 Contact & Links
 

@@ -357,7 +357,7 @@ KanaDojo is available in multiple languages thanks to community contributions:
 
 - **Website**: [kanadojo.com](https://kanadojo.com)
 - **Repository**: [github.com/lingdojo/kanadojo](https://github.com/lingdojo/kanadojo)
-- **Email**: reservecrate@gmail.com
+- **Email**: lingdojo.dev@gmail.com
 
 ---
 

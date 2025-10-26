@@ -11,7 +11,7 @@ import {
   Sun,
   Moon,
   Heart,
-  Sparkle,
+  Sparkle
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -61,7 +61,7 @@ const MainMenu = () => {
   const legalLinks = [
     { name: 'terms', href: '/terms', icon: ScrollText },
     { name: 'privacy', href: '/privacy', icon: Cookie },
-    { name: 'security', href: '/security', icon: FileLock2 },
+    { name: 'security', href: '/security', icon: FileLock2 }
     // { name: 'patch notes', href: '/patch-notes', icon: FileDiff }
   ];
 
@@ -73,7 +73,9 @@ const MainMenu = () => {
     >
       {isLG && (
         <Suspense fallback={<></>}>
-          {process.env.NODE_ENV === 'production' && <Decorations expandDecorations={expandDecorations}/>}
+          {process.env.NODE_ENV === 'production' && (
+            <Decorations expandDecorations={expandDecorations} />
+          )}
           <Button
             variant='secondary'
             size='icon'
@@ -164,10 +166,7 @@ const MainMenu = () => {
               )}
               onClick={() => {
                 playClick();
-                window.open(
-                  'https://github.com/tentoumushii/kanadojo',
-                  '_blank'
-                );
+                window.open('https://github.com/lingdojo/kana-dojo', '_blank');
               }}
             />
             <Heart

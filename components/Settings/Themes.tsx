@@ -22,12 +22,13 @@ const Themes = () => {
 
   // Initialize with first theme to avoid hydration mismatch
   const [randomTheme, setRandomTheme] = useState(themeSets[2].themes[0]);
-  
+
   // Set random theme only on client side after mount
   const [isMounted, setIsMounted] = useState(false);
-  
+
   useEffect(() => {
     setIsMounted(true);
+    console.log(isMounted);
     setRandomTheme(
       themeSets[2].themes[random.integer(0, themeSets[2].themes.length - 1)]
     );
@@ -105,7 +106,7 @@ const Themes = () => {
             )}
           >
             {themeSet.themes.map(currentTheme => (
-              <label 
+              <label
                 key={currentTheme.id}
                 style={{
                   color: currentTheme.mainColor,
@@ -121,7 +122,8 @@ const Themes = () => {
                 onMouseLeave={() => setIsHovered('')}
                 className={clsx(
                   currentTheme.id === 'long' && 'col-span-full',
-                  'py-4 flex justify-center items-center','flex-1 overflow-hidden',
+                  'py-4 flex justify-center items-center',
+                  'flex-1 overflow-hidden',
                   buttonBorderStyles
                 )}
                 onClick={() => {
@@ -159,7 +161,7 @@ const Themes = () => {
                   {currentTheme.id === 'long'
                     ? 'long loooooooong theme'
                     : currentTheme.id.split('-').map((themeNamePart, i) => (
-                        <span 
+                        <span
                           key={themeNamePart + Math.random() * 9999}
                           style={{
                             color:

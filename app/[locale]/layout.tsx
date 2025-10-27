@@ -4,8 +4,10 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import ClientLayout from '../ClientLayout';
 
+type Locale = 'en' | 'es';
+
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
+  return routing.locales.map(locale => ({ locale }));
 }
 
 interface LocaleLayoutProps {
@@ -17,11 +19,11 @@ export default async function LocaleLayout({
   children,
   params
 }: LocaleLayoutProps) {
-  // Await params in Next.js 
+  // Await params in Next.js
   const { locale } = await params;
-  
+
   // Validate that the locale is valid
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
 

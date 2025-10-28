@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 import useSound from 'use-sound';
 import { Random } from 'random-js';
-import useThemeStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/useThemeStore';
 
 const random = new Random();
 
@@ -21,7 +21,7 @@ const clickSoundUrls = [
 ];
 
 export const useClick = () => {
-  const silentMode = useThemeStore(state => state.silentMode);
+  const silentMode = usePreferencesStore(state => state.silentMode);
 
   // Instead of mapping, call each useSound explicitly:
   const [play1] = useSound(clickSoundUrls[0], {
@@ -56,7 +56,7 @@ export const useClick = () => {
 };
 
 export const useCorrect = () => {
-  const silentMode = useThemeStore(state => state.silentMode);
+  const silentMode = usePreferencesStore(state => state.silentMode);
 
   // This URL is static, so no need to memoize
   const successSoundUrl = '/sounds/correct.wav';
@@ -70,7 +70,7 @@ export const useCorrect = () => {
 };
 
 export const useError = () => {
-  const silentMode = useThemeStore(state => state.silentMode);
+  const silentMode = usePreferencesStore(state => state.silentMode);
 
   // This URL is static, so no need to memoize
   const errorSoundUrl = '/sounds/error/error1/error1_1.wav';
@@ -93,7 +93,7 @@ export const useError = () => {
 };
 
 export const useLong = () => {
-  const silentMode = useThemeStore(state => state.silentMode);
+  const silentMode = usePreferencesStore(state => state.silentMode);
 
   // This URL is static, so no need to memoize
   const longSoundUrl = '/sounds/long.wav';

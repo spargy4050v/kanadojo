@@ -7,11 +7,17 @@ import useThemeStore from '@/store/useThemeStore';
 const random = new Random();
 
 const clickSoundUrls = [
-  '/sounds/click/click9/click9_1.wav',
+  /* '/sounds/click/click9/click9_1.wav',
   '/sounds/click/click9/click9_2.wav',
   '/sounds/click/click9/click9_3.wav',
   '/sounds/click/click9/click9_4.wav',
   '/sounds/click/click9/click9_5.wav'
+ */
+  'sounds/click/click4/click4_11.wav',
+  'sounds/click/click4/click4_22.wav',
+  'sounds/click/click4/click4_33.wav',
+  'sounds/click/click4/click4_44.wav',
+  'sounds/click/click4/click4_55.wav'
 ];
 
 export const useClick = () => {
@@ -67,7 +73,7 @@ export const useError = () => {
   const silentMode = useThemeStore(state => state.silentMode);
 
   // This URL is static, so no need to memoize
-  const errorSoundUrl = '/sounds/error/error3/error3_1.wav';
+  const errorSoundUrl = '/sounds/error/error1/error1_1.wav';
 
   const [play] = useSound(errorSoundUrl, {
     volume: silentMode ? 0 : 1,

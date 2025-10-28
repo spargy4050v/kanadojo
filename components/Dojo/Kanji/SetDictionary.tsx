@@ -6,7 +6,7 @@ import N4KanjiArray from '@/static/kanji/N4';
 import N3KanjiArray from '@/static/kanji/N3';
 import N2KanjiArray from '@/static/kanji/N2';
 import useKanjiStore from '@/store/useKanjiStore';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import FuriganaText from '@/components/reusable/FuriganaText';
 
 const createKanjiSetRanges = (numSets: number) =>

@@ -5,7 +5,7 @@ import { Link } from '@/i18n/routing';
 import useKanaStore from '@/store/useKanaStore';
 import useKanjiStore from '@/store/useKanjiStore';
 import useVocabStore from '@/store/useVocabStore';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import { useClick } from '@/lib/hooks/useAudio';
 import { ChevronUp, Play } from 'lucide-react';
 import { usePathname } from 'next/navigation';

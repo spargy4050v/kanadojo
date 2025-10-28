@@ -1,6 +1,6 @@
 // Helpers to export/import user preferences and stats (client-side only)
 
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import useStatsStore from '@/store/useStatsStore';
 
 // JSON-safe type

@@ -1,7 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { useEffect } from 'react';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import fonts from '@/static/fonts';
 import { ScrollRestoration } from 'next-scroll-restoration';
 import WelcomeModal from '@/components/Modals/WelcomeModal';

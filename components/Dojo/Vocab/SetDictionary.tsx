@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { IWord } from '@/lib/interfaces';
 import { cardBorderStyles } from '@/static/styles';
 import useVocabStore from '@/store/useVocabStore';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import FuriganaText from '@/components/reusable/FuriganaText';
 
 import N5Nouns from '@/static/vocab/n5/nouns';

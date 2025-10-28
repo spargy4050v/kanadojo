@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import AudioButton from './AudioButton';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 
 interface SSRAudioButtonProps {
   text: string;

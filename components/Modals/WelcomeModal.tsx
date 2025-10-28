@@ -15,7 +15,7 @@ import {
   Dice5
 } from 'lucide-react';
 import useOnboardingStore from '@/store/useOnboardingStore';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import { useClick } from '@/lib/hooks/useAudio';
 import { buttonBorderStyles, cardBorderStyles } from '@/static/styles';
 import themeSets from '@/static/themes';

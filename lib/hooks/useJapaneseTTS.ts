@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState, useEffect } from 'react';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 
 interface JapaneseVoice {
   name: string;

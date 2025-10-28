@@ -1,7 +1,7 @@
 'use client';
 import clsx from 'clsx';
 import { buttonBorderStyles } from '@/static/styles';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 import { useClick } from '@/lib/hooks/useAudio';
 import { AudioLines, VolumeX, Volume2 } from 'lucide-react';
 // import{Command, KeyboardOff} from 'lucide-react'

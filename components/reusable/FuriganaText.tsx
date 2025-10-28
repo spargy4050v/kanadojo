@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode } from 'react';
-import usePreferencesStore from '@/store/useThemeStore';
+import usePreferencesStore from '@/store/usePreferencesStore';
 
 interface FuriganaTextProps {
   text: string;
